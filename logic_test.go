@@ -56,7 +56,8 @@ func Test_calculateWorth(t *testing.T) {
 		effectIdToInfoMap: map[int]*effectInfo{
 			3: {id: 3, name: "effect1", worth: 100},
 			4: {id: 4, name: "effect2", worth: 200},
-			5: {id: 5, name: "effect2", worth: 400},
+			5: {id: 5, name: "effect3", worth: 400},
+			6: {id: 6, name: "effect4", worth: 800},
 		},
 		ingridIdToInfoMap: map[int]*ingridInfo{
 			6:  {id: 6, name: "ingrid1", effectIdArr: [4]int{0, 0, 0, 0}},
@@ -64,36 +65,42 @@ func Test_calculateWorth(t *testing.T) {
 			8:  {id: 8, name: "ingrid3", effectIdArr: [4]int{3, 4, 0, 1}},
 			9:  {id: 9, name: "ingrid4", effectIdArr: [4]int{3, 5, 0, 1}},
 			10: {id: 10, name: "ingrid5", effectIdArr: [4]int{3, 4, 5, 1}},
-			11: {id: 11, name: "ingrid5", effectIdArr: [4]int{0, 3, 4, 5}},
+			11: {id: 11, name: "ingrid6", effectIdArr: [4]int{0, 3, 4, 5}},
+			12: {id: 12, name: "ingrid7", effectIdArr: [4]int{5, 4, 0, 0}},
 		},
 	}
 
 	type args struct {
-		contextInst *context
-		ingridId1   int
-		ingridId2   int
+		contextPtr *context
+		ingridIds  []int
 	}
 	tests := []struct {
-		name string
-		args args
-		want float64
+		name       string
+		args       args
+		wantExists bool
+		wantWorth  float64
 	}{
-		{"", args{&contextTest, 6, 7}, 0},
-		{"", args{&contextTest, 6, 8}, 0},
-		{"", args{&contextTest, 6, 9}, 0},
-		{"", args{&contextTest, 7, 8}, 0},
-		{"", args{&contextTest, 7, 9}, 0},
-		{"", args{&contextTest, 8, 9}, 100},
-		{"", args{&contextTest, 8, 10}, 300},
-		{"", args{&contextTest, 8, 11}, 300},
-		{"", args{&contextTest, 9, 10}, 500},
-		{"", args{&contextTest, 9, 11}, 500},
-		{"", args{&contextTest, 10, 11}, 700},
+		{"", args{&contextTest, []int{6, 7}}, false, 0},
+		{"", args{&contextTest, []int{6, 8}}, false, 0},
+		{"", args{&contextTest, []int{6, 9}}, false, 0},
+		{"", args{&contextTest, []int{7, 8}}, false, 0},
+		{"", args{&contextTest, []int{7, 9}}, false, 0},
+		{"", args{&contextTest, []int{8, 9}}, true, 100},
+		{"", args{&contextTest, []int{8, 10}}, true, 300},
+		{"", args{&contextTest, []int{8, 11}}, true, 300},
+		{"", args{&contextTest, []int{9, 10}}, true, 500},
+		{"", args{&contextTest, []int{9, 11}}, true, 500},
+		{"", args{&contextTest, []int{10, 11}}, true, 700},
+		{"", args{&contextTest, []int{8, 9, 12}}, true, 700},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := calculateWorth(tt.args.contextInst, tt.args.ingridId1, tt.args.ingridId2); got != tt.want {
-				t.Errorf("calculateWorth() = %v, want %v", got, tt.want)
+			gotExists, gotWorth := calculateWorth(tt.args.contextPtr, tt.args.ingridIds...)
+			if gotExists != tt.wantExists {
+				t.Errorf("calculateWorth() gotExists = %v, want %v", gotExists, tt.wantExists)
+			}
+			if gotWorth != tt.wantWorth {
+				t.Errorf("calculateWorth() gotWorth = %v, want %v", gotWorth, tt.wantWorth)
 			}
 		})
 	}

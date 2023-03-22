@@ -20,7 +20,7 @@ func main() {
 
 	contextInst := readCsvFiles("./effect.csv", "./ingrid.csv")
 
-	pairIdToWorthMap := buildWorthCombinationArray(contextInst, true)
+	pairIdToWorthMap := buildWorthOfCombinationTable(contextInst, true)
 	worthInfoArr := replaceIngridIdsToNames(contextInst, pairIdToWorthMap)
 	sort.Sort(byWorth(*worthInfoArr))
 
