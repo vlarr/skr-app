@@ -22,26 +22,30 @@ func (s byWorth) Less(i, j int) bool {
 	return s[i].worth > s[j].worth
 }
 
-func findEffectIdPair(a [4]int, b [4]int) *[]int {
-	var result []int
-	for _, value1 := range a {
-		if value1 == UnknownEffectId || value1 == OtherEffectId {
-			continue
-		}
-		for _, value2 := range b {
-			if value2 == UnknownEffectId || value2 == OtherEffectId {
-				continue
-			}
-			if value1 == value2 {
-				result = append(result, value1)
+func findEffectIdPair(a ...[4]int) *[]int {
+	var result = make([]int, 0)
+
+	for i := 0; i < len(a); i++ {
+		for j := i + 1; j < len(a); j++ {
+			for _, value1 := range a[i] {
+				if value1 == UnknownEffectId || value1 == OtherEffectId {
+					continue
+				}
+				for _, value2 := range a[j] {
+					if value2 == UnknownEffectId || value2 == OtherEffectId {
+						continue
+					}
+					if value1 == value2 {
+						result = append(result, value1)
+					}
+				}
 			}
 		}
 	}
-
 	return &result
 }
 
-func calculateWorthCombination(contextInst context, info1 ingridInfo, info2 ingridInfo) float64 {
+func calculateWorthCombination(contextInst *context, info1 *ingridInfo, info2 *ingridInfo) float64 {
 	ids := findEffectIdPair(info1.effectIdArr, info2.effectIdArr)
 	var result = 0.0
 	for _, id := range *ids {
@@ -50,7 +54,7 @@ func calculateWorthCombination(contextInst context, info1 ingridInfo, info2 ingr
 	return result
 }
 
-func buildWorthCombinationMap(contextInst context, isFilterZeroWorth bool) map[*[]int]float64 {
+func buildWorthCombinationMap(contextInst *context, isFilterZeroWorth bool) map[*[]int]float64 {
 	result := make(map[*[]int]float64)
 
 	for id1, ingrid1 := range contextInst.ingridIdToInfoMap {
@@ -71,7 +75,7 @@ func buildWorthCombinationMap(contextInst context, isFilterZeroWorth bool) map[*
 	return result
 }
 
-func convertWorthCombinationMapToResultArr(contextInst context, worthMap map[*[]int]float64) *[]worthInfo {
+func convertWorthCombinationMapToResultArr(contextInst *context, worthMap map[*[]int]float64) *[]worthInfo {
 	result := make([]worthInfo, len(worthMap))
 	i := 0
 	for ingridIds, worth := range worthMap {

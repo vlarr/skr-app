@@ -21,11 +21,11 @@ type ingridInfo struct {
 }
 
 type context struct {
-	effectIdToInfoMap map[int]effectInfo
-	ingridIdToInfoMap map[int]ingridInfo
+	effectIdToInfoMap map[int]*effectInfo
+	ingridIdToInfoMap map[int]*ingridInfo
 }
 
-func readEffectCsvFile(filePath string) map[int]effectInfo {
+func readEffectCsvFile(filePath string) map[int]*effectInfo {
 	f, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal("Unable to read input file "+filePath, err)
@@ -42,13 +42,13 @@ func readEffectCsvFile(filePath string) map[int]effectInfo {
 		log.Fatal("Unable to parse file as CSV for "+filePath, err)
 	}
 
-	var result = map[int]effectInfo{}
+	var result = map[int]*effectInfo{}
 
 	for _, record := range records {
 		id, _ := strconv.Atoi(strings.TrimSpace(record[0]))
 		name := strings.TrimSpace(record[1])
 		worth, _ := strconv.ParseFloat(strings.TrimSpace(record[2]), 64)
-		result[id] = effectInfo{
+		result[id] = &effectInfo{
 			id:    id,
 			name:  name,
 			worth: worth,
@@ -58,7 +58,7 @@ func readEffectCsvFile(filePath string) map[int]effectInfo {
 	return result
 }
 
-func readIngridCsvFile(filePath string) map[int]ingridInfo {
+func readIngridCsvFile(filePath string) map[int]*ingridInfo {
 	f, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal("Unable to read input file "+filePath, err)
@@ -75,7 +75,7 @@ func readIngridCsvFile(filePath string) map[int]ingridInfo {
 		log.Fatal("Unable to parse file as CSV for "+filePath, err)
 	}
 
-	var result = map[int]ingridInfo{}
+	var result = map[int]*ingridInfo{}
 
 	for _, record := range records {
 		id, _ := strconv.Atoi(strings.TrimSpace(record[0]))
@@ -85,7 +85,7 @@ func readIngridCsvFile(filePath string) map[int]ingridInfo {
 		eff3, _ := strconv.Atoi(strings.TrimSpace(record[4]))
 		eff4, _ := strconv.Atoi(strings.TrimSpace(record[5]))
 
-		result[id] = ingridInfo{
+		result[id] = &ingridInfo{
 			id:          id,
 			name:        name,
 			effectIdArr: [4]int{eff1, eff2, eff3, eff4},
@@ -95,11 +95,11 @@ func readIngridCsvFile(filePath string) map[int]ingridInfo {
 	return result
 }
 
-func readCsvFiles(effectCsvPath string, ingridCsvPath string) context {
+func readCsvFiles(effectCsvPath string, ingridCsvPath string) *context {
 	effectIdToInfoMap := readEffectCsvFile(effectCsvPath)
 	ingridIdToInfoMap := readIngridCsvFile(ingridCsvPath)
 
-	return context{
+	return &context{
 		effectIdToInfoMap: effectIdToInfoMap,
 		ingridIdToInfoMap: ingridIdToInfoMap,
 	}
