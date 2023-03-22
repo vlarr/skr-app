@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-func showResult(result *[]worthInfo) {
+func showResult(result *[]worthInfoWithNames) {
 	for _, worthInfo := range *result {
 		fmt.Printf("worth=%-6v ingrid=%v\n", worthInfo.worth, strings.Join(*worthInfo.ingridNames, ", "))
 	}
 }
 
-func saveResultToFile(result *[]worthInfo, fileName string) {
+func saveResultToFile(result *[]worthInfoWithNames, fileName string) {
 	f, _ := os.Create(fileName)
 	defer f.Close()
 

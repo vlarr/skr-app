@@ -3,12 +3,17 @@ package main
 const UnknownEffectId = 0
 const OtherEffectId = 1
 
-type worthInfo struct {
+type worthInfoWithIds struct {
+	ingridIds []int
+	worth     float64
+}
+
+type worthInfoWithNames struct {
 	ingridNames *[]string
 	worth       float64
 }
 
-type byWorth []worthInfo
+type byWorth []worthInfoWithNames
 
 func (s byWorth) Len() int {
 	return len(s)
@@ -45,49 +50,55 @@ func findEffectIdPair(a ...[4]int) *[]int {
 	return &result
 }
 
-func calculateWorthCombination(contextInst *context, info1 *ingridInfo, info2 *ingridInfo) float64 {
-	ids := findEffectIdPair(info1.effectIdArr, info2.effectIdArr)
+func calculateWorth(contextInst *context, ingridId1 int, ingridId2 int) float64 {
+	if ingridId1 == ingridId2 {
+		panic(1)
+	}
+
+	ingridInfo1 := contextInst.ingridIdToInfoMap[ingridId1]
+	ingridInfo2 := contextInst.ingridIdToInfoMap[ingridId2]
+	effectIds := findEffectIdPair(ingridInfo1.effectIdArr, ingridInfo2.effectIdArr)
 	var result = 0.0
-	for _, id := range *ids {
+	for _, id := range *effectIds {
 		result = result + contextInst.effectIdToInfoMap[id].worth
 	}
 	return result
 }
 
-func buildWorthCombinationMap(contextInst *context, isFilterZeroWorth bool) map[*[]int]float64 {
-	result := make(map[*[]int]float64)
+func buildWorthCombinationArray(contextInst *context, isFilterZeroWorth bool) *[]worthInfoWithIds {
+	result := make([]worthInfoWithIds, 0)
 
 	for id1, ingrid1 := range contextInst.ingridIdToInfoMap {
 		for id2, ingrid2 := range contextInst.ingridIdToInfoMap {
 			if id2 > id1 {
-				combinationWorth := calculateWorthCombination(contextInst, ingrid1, ingrid2)
+				combinationWorth := calculateWorth(contextInst, id1, id2)
 				idPair := []int{ingrid1.id, ingrid2.id}
 				if isFilterZeroWorth {
 					if combinationWorth > 0 {
-						result[&idPair] = combinationWorth
+						result = append(result, worthInfoWithIds{ingridIds: idPair, worth: combinationWorth})
 					}
 				} else {
-					result[&idPair] = combinationWorth
+					result = append(result, worthInfoWithIds{ingridIds: idPair, worth: combinationWorth})
 				}
 			}
 		}
 	}
-	return result
+	return &result
 }
 
-func convertWorthCombinationMapToResultArr(contextInst *context, worthMap map[*[]int]float64) *[]worthInfo {
-	result := make([]worthInfo, len(worthMap))
+func replaceIngridIdsToNames(contextInst *context, worthInfoWithIdsArr *[]worthInfoWithIds) *[]worthInfoWithNames {
+	result := make([]worthInfoWithNames, len(*worthInfoWithIdsArr))
 	i := 0
-	for ingridIds, worth := range worthMap {
-		ingridNames := make([]string, len(*ingridIds))
+	for _, elem := range *worthInfoWithIdsArr {
+		ingridNames := make([]string, len(elem.ingridIds))
 
-		for j := 0; j < len(*ingridIds); j++ {
-			ingridNames[j] = contextInst.ingridIdToInfoMap[(*ingridIds)[j]].name
+		for j := 0; j < len(ingridNames); j++ {
+			ingridNames[j] = contextInst.ingridIdToInfoMap[elem.ingridIds[j]].name
 		}
 
-		result[i] = worthInfo{
+		result[i] = worthInfoWithNames{
 			ingridNames: &ingridNames,
-			worth:       worth,
+			worth:       elem.worth,
 		}
 		i++
 	}
