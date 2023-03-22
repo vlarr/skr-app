@@ -27,9 +27,8 @@ func (s byWorth) Less(i, j int) bool {
 	return s[i].worth > s[j].worth
 }
 
-func findEffectIdPair(a ...[4]int) *[]int {
-	var result = make([]int, 0)
-
+func findEffectIdPair(a ...[4]int) map[int]bool {
+	pairIdMap := map[int]bool{}
 	for i := 0; i < len(a); i++ {
 		for j := i + 1; j < len(a); j++ {
 			for _, value1 := range a[i] {
@@ -41,13 +40,14 @@ func findEffectIdPair(a ...[4]int) *[]int {
 						continue
 					}
 					if value1 == value2 {
-						result = append(result, value1)
+						pairIdMap[value1] = true
 					}
 				}
 			}
 		}
 	}
-	return &result
+
+	return pairIdMap
 }
 
 func calculateWorth(contextInst *context, ingridId1 int, ingridId2 int) float64 {
@@ -59,7 +59,7 @@ func calculateWorth(contextInst *context, ingridId1 int, ingridId2 int) float64 
 	ingridInfo2 := contextInst.ingridIdToInfoMap[ingridId2]
 	effectIds := findEffectIdPair(ingridInfo1.effectIdArr, ingridInfo2.effectIdArr)
 	var result = 0.0
-	for _, id := range *effectIds {
+	for id := range effectIds {
 		result = result + contextInst.effectIdToInfoMap[id].worth
 	}
 	return result

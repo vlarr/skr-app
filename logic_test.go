@@ -5,21 +5,42 @@ import (
 	"testing"
 )
 
+func prepareIdSet(ids ...int) map[int]bool {
+	result := map[int]bool{}
+	for _, id := range ids {
+		result[id] = true
+	}
+	return result
+}
+
 func Test_findEffectIdPair(t *testing.T) {
+
 	type args struct {
 		a [][4]int
 	}
 	tests := []struct {
 		name string
 		args args
-		want *[]int
+		want map[int]bool
 	}{
 		// TODO: Add test cases.
-		{"test", args{[][4]int{{0, 0, 0, 0}, {0, 0, 0, 0}}}, &[]int{}},
-		{"test", args{[][4]int{{2, 0, 0, 0}, {0, 0, 0, 0}}}, &[]int{}},
-		{"test", args{[][4]int{{2, 0, 0, 0}, {2, 0, 0, 0}}}, &[]int{2}},
-		{"test", args{[][4]int{{2, 3, 0, 0}, {2, 4, 0, 0}}}, &[]int{2}},
-		{"test", args{[][4]int{{2, 3, 4, 0}, {2, 3, 5, 0}}}, &[]int{2, 3}},
+		{"", args{[][4]int{{0, 0, 0, 0}}}, prepareIdSet()},
+		{"", args{[][4]int{{0, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet()},
+		{"", args{[][4]int{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet()},
+
+		{"", args{[][4]int{{2, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet()},
+		{"", args{[][4]int{{2, 0, 0, 0}, {2, 0, 0, 0}}}, prepareIdSet(2)},
+		{"", args{[][4]int{{2, 3, 0, 0}, {2, 4, 0, 0}}}, prepareIdSet(2)},
+		{"", args{[][4]int{{2, 3, 4, 0}, {2, 3, 5, 0}}}, prepareIdSet(2, 3)},
+		{"", args{[][4]int{{2, 3, 4, 5}, {2, 3, 4, 5}}}, prepareIdSet(2, 3, 4, 5)},
+
+		{"", args{[][4]int{{2, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet()},
+		{"", args{[][4]int{{2, 0, 0, 0}, {2, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet(2)},
+		{"", args{[][4]int{{2, 0, 0, 0}, {2, 0, 0, 0}, {2, 0, 0, 0}}}, prepareIdSet(2)},
+		{"", args{[][4]int{{2, 0, 0, 0}, {3, 0, 0, 0}, {2, 3, 0, 0}}}, prepareIdSet(2, 3)},
+		{"", args{[][4]int{{2, 3, 0, 0}, {2, 4, 0, 0}, {4, 3, 0, 0}}}, prepareIdSet(2, 3, 4)},
+
+		{"", args{[][4]int{{2, 3, 8, 9}, {2, 4, 5, 8}, {3, 4, 6, 7}, {5, 6, 7, 9}}}, prepareIdSet(2, 3, 4, 5, 6, 7, 8, 9)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -18,7 +18,7 @@ func containArg(args *[]string, testArg string) bool {
 func main() {
 	log.Println("hello there")
 
-	contextInst := readCsvFiles("./local/effect.csv", "./local/ingrid.csv")
+	contextInst := readCsvFiles("./effect.csv", "./ingrid.csv")
 
 	pairIdToWorthMap := buildWorthCombinationArray(contextInst, true)
 	worthInfoArr := replaceIngridIdsToNames(contextInst, pairIdToWorthMap)
@@ -31,6 +31,6 @@ func main() {
 	}
 
 	if containArg(&args, "--save") {
-		saveResultToFile(worthInfoArr, "./local/output.txt")
+		saveResultToFile(worthInfoArr, "./output.txt")
 	}
 }
