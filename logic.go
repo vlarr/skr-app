@@ -9,8 +9,8 @@ type worthInfoWithIds struct {
 }
 
 type worthInfoWithNames struct {
-	ingridNames *[]string
-	worth       float64
+	ingridNamesPtr *[]string
+	worth          float64
 }
 
 type byWorth []worthInfoWithNames
@@ -50,28 +50,28 @@ func findEffectIdPair(a ...[4]int) map[int]bool {
 	return pairIdMap
 }
 
-func calculateWorth(contextInst *context, ingridId1 int, ingridId2 int) float64 {
+func calculateWorth(contextPtr *context, ingridId1 int, ingridId2 int) float64 {
 	if ingridId1 == ingridId2 {
 		panic(1)
 	}
 
-	ingridInfo1 := contextInst.ingridIdToInfoMap[ingridId1]
-	ingridInfo2 := contextInst.ingridIdToInfoMap[ingridId2]
+	ingridInfo1 := contextPtr.ingridIdToInfoMap[ingridId1]
+	ingridInfo2 := contextPtr.ingridIdToInfoMap[ingridId2]
 	effectIds := findEffectIdPair(ingridInfo1.effectIdArr, ingridInfo2.effectIdArr)
 	var result = 0.0
 	for id := range effectIds {
-		result = result + contextInst.effectIdToInfoMap[id].worth
+		result = result + contextPtr.effectIdToInfoMap[id].worth
 	}
 	return result
 }
 
-func buildWorthCombinationArray(contextInst *context, isFilterZeroWorth bool) *[]worthInfoWithIds {
+func buildWorthCombinationArray(contextPtr *context, isFilterZeroWorth bool) *[]worthInfoWithIds {
 	result := make([]worthInfoWithIds, 0)
 
-	for id1, ingrid1 := range contextInst.ingridIdToInfoMap {
-		for id2, ingrid2 := range contextInst.ingridIdToInfoMap {
+	for id1, ingrid1 := range contextPtr.ingridIdToInfoMap {
+		for id2, ingrid2 := range contextPtr.ingridIdToInfoMap {
 			if id2 > id1 {
-				combinationWorth := calculateWorth(contextInst, id1, id2)
+				combinationWorth := calculateWorth(contextPtr, id1, id2)
 				idPair := []int{ingrid1.id, ingrid2.id}
 				if isFilterZeroWorth {
 					if combinationWorth > 0 {
@@ -86,19 +86,19 @@ func buildWorthCombinationArray(contextInst *context, isFilterZeroWorth bool) *[
 	return &result
 }
 
-func replaceIngridIdsToNames(contextInst *context, worthInfoWithIdsArr *[]worthInfoWithIds) *[]worthInfoWithNames {
+func replaceIngridIdsToNames(contextPtr *context, worthInfoWithIdsArr *[]worthInfoWithIds) *[]worthInfoWithNames {
 	result := make([]worthInfoWithNames, len(*worthInfoWithIdsArr))
 	i := 0
 	for _, elem := range *worthInfoWithIdsArr {
 		ingridNames := make([]string, len(elem.ingridIds))
 
 		for j := 0; j < len(ingridNames); j++ {
-			ingridNames[j] = contextInst.ingridIdToInfoMap[elem.ingridIds[j]].name
+			ingridNames[j] = contextPtr.ingridIdToInfoMap[elem.ingridIds[j]].name
 		}
 
 		result[i] = worthInfoWithNames{
-			ingridNames: &ingridNames,
-			worth:       elem.worth,
+			ingridNamesPtr: &ingridNames,
+			worth:          elem.worth,
 		}
 		i++
 	}

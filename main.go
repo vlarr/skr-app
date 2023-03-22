@@ -1,8 +1,8 @@
 package main
 
 import (
+	"flag"
 	"log"
-	"os"
 	"sort"
 )
 
@@ -24,13 +24,14 @@ func main() {
 	worthInfoArr := replaceIngridIdsToNames(contextInst, pairIdToWorthMap)
 	sort.Sort(byWorth(*worthInfoArr))
 
-	args := os.Args[1:]
+	showFlagPtr := flag.Bool("show", false, "show results")
+	saveFlagPtr := flag.Bool("save", false, "save results")
+	flag.Parse()
 
-	if containArg(&args, "--show") {
+	if *showFlagPtr {
 		showResult(worthInfoArr)
 	}
-
-	if containArg(&args, "--save") {
+	if *saveFlagPtr {
 		saveResultToFile(worthInfoArr, "./output.txt")
 	}
 }
