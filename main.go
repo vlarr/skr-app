@@ -20,18 +20,18 @@ func main() {
 
 	contextPtr := readCsvFiles("./effect.csv", "./ingrid.csv")
 
-	pairIdToWorthMap := buildWorthOfCombinationTable(contextPtr, true)
-	worthInfoPtr := replaceIngridIdsToNames(contextPtr, pairIdToWorthMap)
-	sort.Sort(byWorth(*worthInfoPtr))
+	ingridIdsWithWorthTable := buildWorthOfCombinationTableForIngridNums(contextPtr, []int{2, 3}, true)
+	ingridNamesWithWorthTable := replaceIngridIdsToNames(contextPtr, ingridIdsWithWorthTable)
+	sort.Sort(byWorth(*ingridNamesWithWorthTable))
 
 	showFlagPtr := flag.Bool("show", false, "show results")
 	saveFlagPtr := flag.Bool("save", false, "save results")
 	flag.Parse()
 
 	if *showFlagPtr {
-		showResult(worthInfoPtr)
+		showResult(ingridNamesWithWorthTable)
 	}
 	if *saveFlagPtr {
-		saveResultToFile(worthInfoPtr, "./output.txt")
+		saveResultToFile(ingridNamesWithWorthTable, "./output.txt")
 	}
 }

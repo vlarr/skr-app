@@ -70,13 +70,16 @@ func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth f
 
 	if len(effectIds) == 0 {
 		return false, 0.0
-	} else {
-		var result = 0.0
-		for id := range effectIds {
-			result = result + contextPtr.effectIdToInfoMap[id].worth
-		}
-		return true, result
 	}
+
+	var result = 0.0
+	for id := range effectIds {
+		result = result + contextPtr.effectIdToInfoMap[id].worth
+	}
+
+	reduceWorthCoef := 2.0 / float64(len(ingridIds))
+
+	return true, result * reduceWorthCoef
 }
 
 func validateIds(ids []int) bool {
@@ -88,7 +91,7 @@ func validateIds(ids []int) bool {
 	return true
 }
 
-func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
+func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
 	result := make([]IngridIdsWithWorth, 0)
 
 	ingridIds := make([]int, len(contextPtr.ingridIdToInfoMap))
@@ -100,13 +103,13 @@ func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *
 		}
 	}
 
-	iter := createIter(2, &ingridIds)
+	iter := createIter(ingridNum, &ingridIds)
 	isNext := true
 
 	for isNext {
 		ids := iter.getValues()
 		if validateIds(ids) {
-			combinationExists, combinationWorth := calculateWorth(contextPtr, ids[0], ids[1])
+			combinationExists, combinationWorth := calculateWorth(contextPtr, ids...)
 			if combinationExists {
 				if isFilterZeroWorth {
 					if combinationWorth > 0 {
@@ -119,6 +122,19 @@ func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *
 		}
 
 		isNext, iter = iter.next()
+	}
+
+	return &result
+}
+
+func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums []int, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
+	result := make([]IngridIdsWithWorth, 0)
+
+	for _, num := range ingridNums {
+		tempResult := buildWorthOfCombinationTable(contextPtr, num, isFilterZeroWorth)
+		for _, worth := range *tempResult {
+			result = append(result, worth)
+		}
 	}
 
 	return &result

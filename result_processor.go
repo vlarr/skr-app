@@ -9,7 +9,7 @@ import (
 
 func showResult(resultPtr *[]IngridNamesWithWorth) {
 	for _, worthInfo := range *resultPtr {
-		fmt.Printf("worth=%-6v ingrid=%v\n", worthInfo.worth, strings.Join(*worthInfo.ingridNamesPtr, ", "))
+		fmt.Printf("worth=%-6.1f ingrid=%v\n", worthInfo.worth, strings.Join(*worthInfo.ingridNamesPtr, ", "))
 	}
 }
 
@@ -18,7 +18,7 @@ func saveResultToFile(resultPtr *[]IngridNamesWithWorth, fileName string) {
 	defer f.Close()
 
 	for _, worthInfo := range *resultPtr {
-		str := fmt.Sprintf("worth=%-6v ingrid=%v\n", worthInfo.worth, strings.Join(*worthInfo.ingridNamesPtr, ", "))
+		str := fmt.Sprintf("worth=%-6.1f ingrid=%v\n", worthInfo.worth, strings.Join(*worthInfo.ingridNamesPtr, ", "))
 		f.WriteString(str)
 	}
 
