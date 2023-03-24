@@ -79,24 +79,48 @@ func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth f
 	}
 }
 
+func validateIds(ids []int) bool {
+	for i := 0; i < len(ids)-1; i++ {
+		if ids[i+1] <= ids[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
 	result := make([]IngridIdsWithWorth, 0)
 
-	for id1, ingrid1 := range contextPtr.ingridIdToInfoMap {
-		for id2, ingrid2 := range contextPtr.ingridIdToInfoMap {
-			if id2 > id1 {
-				_, combinationWorth := calculateWorth(contextPtr, id1, id2)
-				idPair := []int{ingrid1.id, ingrid2.id}
+	ingridIds := make([]int, len(contextPtr.ingridIdToInfoMap))
+	{
+		i := 0
+		for id := range contextPtr.ingridIdToInfoMap {
+			ingridIds[i] = id
+			i++
+		}
+	}
+
+	iter := createIter(2, &ingridIds)
+	isNext := true
+
+	for isNext {
+		ids := iter.getValues()
+		if validateIds(ids) {
+			combinationExists, combinationWorth := calculateWorth(contextPtr, ids[0], ids[1])
+			if combinationExists {
 				if isFilterZeroWorth {
 					if combinationWorth > 0 {
-						result = append(result, IngridIdsWithWorth{ingridIds: idPair, worth: combinationWorth})
+						result = append(result, IngridIdsWithWorth{ingridIds: ids, worth: combinationWorth})
 					}
 				} else {
-					result = append(result, IngridIdsWithWorth{ingridIds: idPair, worth: combinationWorth})
+					result = append(result, IngridIdsWithWorth{ingridIds: ids, worth: combinationWorth})
 				}
 			}
 		}
+
+		isNext, iter = iter.next()
 	}
+
 	return &result
 }
 
