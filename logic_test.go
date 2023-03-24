@@ -14,7 +14,6 @@ func prepareIdSet(ids ...int) map[int]bool {
 }
 
 func Test_findEffectIdPair(t *testing.T) {
-
 	type args struct {
 		a [][4]int
 	}
@@ -23,7 +22,6 @@ func Test_findEffectIdPair(t *testing.T) {
 		args args
 		want map[int]bool
 	}{
-		// TODO: Add test cases.
 		{"", args{[][4]int{{0, 0, 0, 0}}}, prepareIdSet()},
 		{"", args{[][4]int{{0, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet()},
 		{"", args{[][4]int{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}}, prepareIdSet()},

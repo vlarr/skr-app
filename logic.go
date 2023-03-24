@@ -1,19 +1,19 @@
 package main
 
-const UnknownEffectId = 0
-const OtherEffectId = 1
+const unknownEffectId = 0
+const otherEffectId = 1
 
-type ingridIdsWithWorth struct {
+type IngridIdsWithWorth struct {
 	ingridIds []int
 	worth     float64
 }
 
-type ingridNamesWithWorth struct {
+type IngridNamesWithWorth struct {
 	ingridNamesPtr *[]string
 	worth          float64
 }
 
-type byWorth []ingridNamesWithWorth
+type byWorth []IngridNamesWithWorth
 
 func (s byWorth) Len() int {
 	return len(s)
@@ -32,11 +32,11 @@ func findEffectIdPair(a ...[4]int) map[int]bool {
 	for i := 0; i < len(a); i++ {
 		for j := i + 1; j < len(a); j++ {
 			for _, value1 := range a[i] {
-				if value1 == UnknownEffectId || value1 == OtherEffectId {
+				if value1 == unknownEffectId || value1 == otherEffectId {
 					continue
 				}
 				for _, value2 := range a[j] {
-					if value2 == UnknownEffectId || value2 == OtherEffectId {
+					if value2 == unknownEffectId || value2 == otherEffectId {
 						continue
 					}
 					if value1 == value2 {
@@ -79,8 +79,8 @@ func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth f
 	}
 }
 
-func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *[]ingridIdsWithWorth {
-	result := make([]ingridIdsWithWorth, 0)
+func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
+	result := make([]IngridIdsWithWorth, 0)
 
 	for id1, ingrid1 := range contextPtr.ingridIdToInfoMap {
 		for id2, ingrid2 := range contextPtr.ingridIdToInfoMap {
@@ -89,10 +89,10 @@ func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *
 				idPair := []int{ingrid1.id, ingrid2.id}
 				if isFilterZeroWorth {
 					if combinationWorth > 0 {
-						result = append(result, ingridIdsWithWorth{ingridIds: idPair, worth: combinationWorth})
+						result = append(result, IngridIdsWithWorth{ingridIds: idPair, worth: combinationWorth})
 					}
 				} else {
-					result = append(result, ingridIdsWithWorth{ingridIds: idPair, worth: combinationWorth})
+					result = append(result, IngridIdsWithWorth{ingridIds: idPair, worth: combinationWorth})
 				}
 			}
 		}
@@ -100,8 +100,8 @@ func buildWorthOfCombinationTable(contextPtr *context, isFilterZeroWorth bool) *
 	return &result
 }
 
-func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]ingridIdsWithWorth) *[]ingridNamesWithWorth {
-	result := make([]ingridNamesWithWorth, len(*ingridIdsWithWorthPtr))
+func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]IngridIdsWithWorth) *[]IngridNamesWithWorth {
+	result := make([]IngridNamesWithWorth, len(*ingridIdsWithWorthPtr))
 	i := 0
 	for _, elem := range *ingridIdsWithWorthPtr {
 		ingridNames := make([]string, len(elem.ingridIds))
@@ -110,7 +110,7 @@ func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]ingri
 			ingridNames[j] = contextPtr.ingridIdToInfoMap[elem.ingridIds[j]].name
 		}
 
-		result[i] = ingridNamesWithWorth{
+		result[i] = IngridNamesWithWorth{
 			ingridNamesPtr: &ingridNames,
 			worth:          elem.worth,
 		}

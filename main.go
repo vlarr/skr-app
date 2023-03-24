@@ -18,20 +18,20 @@ func containArg(args *[]string, testArg string) bool {
 func main() {
 	log.Println("hello there")
 
-	contextInst := readCsvFiles("./effect.csv", "./ingrid.csv")
+	contextPtr := readCsvFiles("./effect.csv", "./ingrid.csv")
 
-	pairIdToWorthMap := buildWorthOfCombinationTable(contextInst, true)
-	worthInfoArr := replaceIngridIdsToNames(contextInst, pairIdToWorthMap)
-	sort.Sort(byWorth(*worthInfoArr))
+	pairIdToWorthMap := buildWorthOfCombinationTable(contextPtr, true)
+	worthInfoPtr := replaceIngridIdsToNames(contextPtr, pairIdToWorthMap)
+	sort.Sort(byWorth(*worthInfoPtr))
 
 	showFlagPtr := flag.Bool("show", false, "show results")
 	saveFlagPtr := flag.Bool("save", false, "save results")
 	flag.Parse()
 
 	if *showFlagPtr {
-		showResult(worthInfoArr)
+		showResult(worthInfoPtr)
 	}
 	if *saveFlagPtr {
-		saveResultToFile(worthInfoArr, "./output.txt")
+		saveResultToFile(worthInfoPtr, "./output.txt")
 	}
 }
