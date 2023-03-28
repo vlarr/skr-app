@@ -27,15 +27,15 @@ func (s byWorth) Less(i, j int) bool {
 	return s[i].worth > s[j].worth
 }
 
-func findEffectIdPair(a ...[4]int) map[int]bool {
+func findActiveEffectsByIngridEffects(ingridEffectsTable ...[4]int) map[int]bool {
 	pairIdMap := map[int]bool{}
-	for i := 0; i < len(a); i++ {
-		for j := i + 1; j < len(a); j++ {
-			for _, value1 := range a[i] {
+	for i := 0; i < len(ingridEffectsTable); i++ {
+		for j := i + 1; j < len(ingridEffectsTable); j++ {
+			for _, value1 := range ingridEffectsTable[i] {
 				if value1 == unknownEffectId || value1 == otherEffectId {
 					continue
 				}
-				for _, value2 := range a[j] {
+				for _, value2 := range ingridEffectsTable[j] {
 					if value2 == unknownEffectId || value2 == otherEffectId {
 						continue
 					}
@@ -50,45 +50,35 @@ func findEffectIdPair(a ...[4]int) map[int]bool {
 	return pairIdMap
 }
 
-func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth float64) {
-	ingridIdMap := map[int]bool{}
-	for _, ingridId := range ingridIds {
-		ingridIdMap[ingridId] = true
-	}
-
-	if len(ingridIdMap) < 2 || len(ingridIds) != len(ingridIdMap) {
-		panic(1)
-	}
-
+func findActiveEffectsByIngridIds(contextPtr *context, ingridIds ...int) map[int]bool {
 	var ingridEffectsTable [][4]int
 	for _, ingridId := range ingridIds {
 		effectIdArr := contextPtr.ingridIdToInfoMap[ingridId].effectIdArr
 		ingridEffectsTable = append(ingridEffectsTable, effectIdArr)
 	}
 
-	effectIds := findEffectIdPair(ingridEffectsTable...)
+	return findActiveEffectsByIngridEffects(ingridEffectsTable...)
+}
 
+func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth float64) {
+	if !checkUniqueIds(ingridIds) || len(ingridIds) < 2 {
+		panic(1)
+	}
+
+	effectIds := findActiveEffectsByIngridIds(contextPtr, ingridIds...)
 	if len(effectIds) == 0 {
 		return false, 0.0
 	}
 
 	var result = 0.0
-	for id := range effectIds {
+	for id, _ := range effectIds {
 		result = result + contextPtr.effectIdToInfoMap[id].worth
 	}
 
-	reduceWorthCoef := 2.0 / float64(len(ingridIds))
+	//reduceWorthCoef := 2.0 / float64(len(ingridIds))
+	reduceWorthCoef := 1.0
 
 	return true, result * reduceWorthCoef
-}
-
-func validateIds(ids []int) bool {
-	for i := 0; i < len(ids)-1; i++ {
-		if ids[i+1] <= ids[i] {
-			return false
-		}
-	}
-	return true
 }
 
 func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
@@ -108,7 +98,7 @@ func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, isFilterZe
 
 	for isNext {
 		ids := iter.getValues()
-		if validateIds(ids) {
+		if simpleValidateIngridIdsByOrder(ids) && validateIngridByActiveEffects(contextPtr, ids) {
 			combinationExists, combinationWorth := calculateWorth(contextPtr, ids...)
 			if combinationExists {
 				if isFilterZeroWorth {

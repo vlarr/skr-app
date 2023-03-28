@@ -42,8 +42,8 @@ func Test_findEffectIdPair(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := findEffectIdPair(tt.args.a...); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("findEffectIdPair() = %v, want %v", got, tt.want)
+			if got := findActiveEffectsByIngridEffects(tt.args.a...); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findActiveEffectsByIngridEffects() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -89,6 +89,7 @@ func Test_calculateWorth(t *testing.T) {
 		{"", args{&contextTest, []int{9, 10}}, true, 500},
 		{"", args{&contextTest, []int{9, 11}}, true, 500},
 		{"", args{&contextTest, []int{10, 11}}, true, 700},
+		{"", args{&contextTest, []int{8, 9, 11}}, true, 700},
 		{"", args{&contextTest, []int{8, 9, 12}}, true, 700},
 	}
 	for _, tt := range tests {
