@@ -28,26 +28,21 @@ func (s byWorth) Less(i, j int) bool {
 }
 
 func findActiveEffectsByIngridEffects(ingridEffectsTable ...[4]int) map[int]bool {
-	pairIdMap := map[int]bool{}
-	for i := 0; i < len(ingridEffectsTable); i++ {
-		for j := i + 1; j < len(ingridEffectsTable); j++ {
-			for _, value1 := range ingridEffectsTable[i] {
-				if value1 == unknownEffectId || value1 == otherEffectId {
-					continue
-				}
-				for _, value2 := range ingridEffectsTable[j] {
-					if value2 == unknownEffectId || value2 == otherEffectId {
-						continue
-					}
-					if value1 == value2 {
-						pairIdMap[value1] = true
-					}
-				}
-			}
+	effectCounterMap := map[int]int{}
+
+	for _, ingridEffectsRow := range ingridEffectsTable {
+		for _, effectId := range ingridEffectsRow {
+			effectCounterMap[effectId]++
 		}
 	}
 
-	return pairIdMap
+	result := map[int]bool{}
+	for effectId, i := range effectCounterMap {
+		if effectId != unknownEffectId && effectId != otherEffectId && i >= 2 {
+			result[effectId] = true
+		}
+	}
+	return result
 }
 
 func findActiveEffectsByIngridIds(contextPtr *context, ingridIds ...int) map[int]bool {
