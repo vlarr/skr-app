@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 func checkUniqueIds(ids []int) bool {
 	idMap := map[int]bool{}
 	for _, id := range ids {
@@ -15,4 +17,10 @@ func equalIdMaps(map1 map[int]bool, map2 map[int]bool) bool {
 		}
 	}
 	return true
+}
+
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }

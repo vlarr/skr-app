@@ -30,7 +30,10 @@ func readEffectCsvFile(filePath string) map[int]*effectInfo {
 	if err != nil {
 		log.Fatal("Unable to read input file "+filePath, err)
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		checkErr(err)
+	}(f)
 
 	csvReader := csv.NewReader(f)
 	csvReader.LazyQuotes = true
@@ -63,7 +66,10 @@ func readIngridCsvFile(filePath string) map[int]*ingridInfo {
 	if err != nil {
 		log.Fatal("Unable to read input file "+filePath, err)
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		checkErr(err)
+	}(f)
 
 	csvReader := csv.NewReader(f)
 	csvReader.LazyQuotes = true

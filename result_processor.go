@@ -16,15 +16,22 @@ func showResult(resultPtr *[]IngridNamesWithWorth) {
 
 func saveResultToFile(resultPtr *[]IngridNamesWithWorth, fileName string) {
 	f, _ := os.Create(fileName)
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		checkErr(err)
+	}(f)
 
-	f.WriteString(fmt.Sprintf("results: %v\n", len(*resultPtr)))
+	_, err := f.WriteString(fmt.Sprintf("results: %v\n", len(*resultPtr)))
+	checkErr(err)
+
 	for _, worthInfo := range *resultPtr {
 		str := fmt.Sprintf("worth=%-6.1f ingrid=%v\n", worthInfo.worth, strings.Join(*worthInfo.ingridNamesPtr, ", "))
-		f.WriteString(str)
+		_, err = f.WriteString(str)
+		checkErr(err)
 	}
 
 	log.Printf("Write %v lines to %v\n", len(*resultPtr), fileName)
 
-	f.Sync()
+	err = f.Sync()
+	checkErr(err)
 }
