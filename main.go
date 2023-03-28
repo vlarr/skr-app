@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func parseIntSet(str string) []int {
+func parseIntArray(str string) []int {
 	var result []int
 	for _, s := range strings.Split(str, ",") {
 		num, err := strconv.Atoi(strings.TrimSpace(s))
@@ -29,7 +29,7 @@ func main() {
 	outputFileNamePtr := flag.String("output-file", "output.txt", "output file name.")
 
 	flag.Parse()
-	numIngrids := parseIntSet(*numIngridsStrPtr)
+	numIngrids := parseIntArray(*numIngridsStrPtr)
 
 	contextPtr := readCsvFiles(*effectCsvFileNamePtr, *ingridCsvFileNamePtr)
 	ingridIdsWithWorthTable := buildWorthOfCombinationTableForIngridNums(contextPtr, numIngrids, *reduceCoefFlagPtr)

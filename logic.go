@@ -3,17 +3,17 @@ package main
 const unknownEffectId = 0
 const otherEffectId = 1
 
-type IngridIdsWithWorth struct {
+type IngridIdsWorth struct {
 	ingridIds []int
 	worth     float64
 }
 
-type IngridNamesWithWorth struct {
+type IngridNamesWorth struct {
 	ingridNamesPtr *[]string
 	worth          float64
 }
 
-type byWorth []IngridNamesWithWorth
+type byWorth []IngridNamesWorth
 
 func (s byWorth) Len() int {
 	return len(s)
@@ -83,8 +83,8 @@ func calculateWorth(contextPtr *context, enableReduceCoef bool, ingridIds ...int
 	return true, result
 }
 
-func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, enableReduceCoef bool) *[]IngridIdsWithWorth {
-	result := make([]IngridIdsWithWorth, 0)
+func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, enableReduceCoef bool) *[]IngridIdsWorth {
+	result := make([]IngridIdsWorth, 0)
 
 	ingridIds := make([]int, len(contextPtr.ingridIdToInfoMap))
 	{
@@ -104,7 +104,7 @@ func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, enableRedu
 			combinationExists, combinationWorth := calculateWorth(contextPtr, enableReduceCoef, ids...)
 			if combinationExists {
 				if combinationWorth > 0 {
-					result = append(result, IngridIdsWithWorth{ingridIds: ids, worth: combinationWorth})
+					result = append(result, IngridIdsWorth{ingridIds: ids, worth: combinationWorth})
 				}
 			}
 		}
@@ -115,8 +115,8 @@ func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, enableRedu
 	return &result
 }
 
-func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums []int, enableReduceCoef bool) *[]IngridIdsWithWorth {
-	result := make([]IngridIdsWithWorth, 0)
+func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums []int, enableReduceCoef bool) *[]IngridIdsWorth {
+	result := make([]IngridIdsWorth, 0)
 
 	for _, num := range ingridNums {
 		resultElem := buildWorthOfCombinationTable(contextPtr, num, enableReduceCoef)
@@ -128,8 +128,8 @@ func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums [
 	return &result
 }
 
-func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]IngridIdsWithWorth) *[]IngridNamesWithWorth {
-	result := make([]IngridNamesWithWorth, len(*ingridIdsWithWorthPtr))
+func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]IngridIdsWorth) *[]IngridNamesWorth {
+	result := make([]IngridNamesWorth, len(*ingridIdsWithWorthPtr))
 	i := 0
 	for _, elem := range *ingridIdsWithWorthPtr {
 		ingridNames := make([]string, len(elem.ingridIds))
@@ -138,7 +138,7 @@ func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]Ingri
 			ingridNames[j] = contextPtr.ingridIdToInfoMap[elem.ingridIds[j]].name
 		}
 
-		result[i] = IngridNamesWithWorth{
+		result[i] = IngridNamesWorth{
 			ingridNamesPtr: &ingridNames,
 			worth:          elem.worth,
 		}
