@@ -69,8 +69,9 @@ func Test_calculateWorth(t *testing.T) {
 	}
 
 	type args struct {
-		contextPtr *context
-		ingridIds  []int
+		contextPtr       *context
+		enableReduceCoef bool
+		ingridIds        []int
 	}
 	tests := []struct {
 		name       string
@@ -78,23 +79,23 @@ func Test_calculateWorth(t *testing.T) {
 		wantExists bool
 		wantWorth  float64
 	}{
-		{"", args{&contextTest, []int{6, 7}}, false, 0},
-		{"", args{&contextTest, []int{6, 8}}, false, 0},
-		{"", args{&contextTest, []int{6, 9}}, false, 0},
-		{"", args{&contextTest, []int{7, 8}}, false, 0},
-		{"", args{&contextTest, []int{7, 9}}, false, 0},
-		{"", args{&contextTest, []int{8, 9}}, true, 100},
-		{"", args{&contextTest, []int{8, 10}}, true, 300},
-		{"", args{&contextTest, []int{8, 11}}, true, 300},
-		{"", args{&contextTest, []int{9, 10}}, true, 500},
-		{"", args{&contextTest, []int{9, 11}}, true, 500},
-		{"", args{&contextTest, []int{10, 11}}, true, 700},
-		{"", args{&contextTest, []int{8, 9, 11}}, true, 700},
-		{"", args{&contextTest, []int{8, 9, 12}}, true, 700},
+		{"", args{&contextTest, false, []int{6, 7}}, false, 0},
+		{"", args{&contextTest, false, []int{6, 8}}, false, 0},
+		{"", args{&contextTest, false, []int{6, 9}}, false, 0},
+		{"", args{&contextTest, false, []int{7, 8}}, false, 0},
+		{"", args{&contextTest, false, []int{7, 9}}, false, 0},
+		{"", args{&contextTest, false, []int{8, 9}}, true, 100},
+		{"", args{&contextTest, false, []int{8, 10}}, true, 300},
+		{"", args{&contextTest, false, []int{8, 11}}, true, 300},
+		{"", args{&contextTest, false, []int{9, 10}}, true, 500},
+		{"", args{&contextTest, false, []int{9, 11}}, true, 500},
+		{"", args{&contextTest, false, []int{10, 11}}, true, 700},
+		{"", args{&contextTest, false, []int{8, 9, 11}}, true, 700},
+		{"", args{&contextTest, false, []int{8, 9, 12}}, true, 700},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotExists, gotWorth := calculateWorth(tt.args.contextPtr, tt.args.ingridIds...)
+			gotExists, gotWorth := calculateWorth(tt.args.contextPtr, tt.args.enableReduceCoef, tt.args.ingridIds...)
 			if gotExists != tt.wantExists {
 				t.Errorf("calculateWorth() gotExists = %v, want %v", gotExists, tt.wantExists)
 			}

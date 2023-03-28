@@ -60,7 +60,7 @@ func findActiveEffectsByIngridIds(contextPtr *context, ingridIds ...int) map[int
 	return findActiveEffectsByIngridEffects(ingridEffectsTable...)
 }
 
-func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth float64) {
+func calculateWorth(contextPtr *context, enableReduceCoef bool, ingridIds ...int) (exists bool, worth float64) {
 	if !checkUniqueIds(ingridIds) || len(ingridIds) < 2 {
 		panic(1)
 	}
@@ -71,17 +71,19 @@ func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth f
 	}
 
 	var result = 0.0
-	for id, _ := range effectIds {
+	for id := range effectIds {
 		result = result + contextPtr.effectIdToInfoMap[id].worth
 	}
 
-	//reduceWorthCoef := 2.0 / float64(len(ingridIds))
-	reduceWorthCoef := 1.0
+	if enableReduceCoef {
+		reduceWorthCoef := 2.0 / float64(len(ingridIds))
+		result = result * reduceWorthCoef
+	}
 
-	return true, result * reduceWorthCoef
+	return true, result
 }
 
-func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
+func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, enableReduceCoef bool) *[]IngridIdsWithWorth {
 	result := make([]IngridIdsWithWorth, 0)
 
 	ingridIds := make([]int, len(contextPtr.ingridIdToInfoMap))
@@ -99,13 +101,9 @@ func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, isFilterZe
 	for isNext {
 		ids := iter.getValues()
 		if simpleValidateIngridIdsByOrder(ids) && validateIngridByActiveEffects(contextPtr, ids) {
-			combinationExists, combinationWorth := calculateWorth(contextPtr, ids...)
+			combinationExists, combinationWorth := calculateWorth(contextPtr, enableReduceCoef, ids...)
 			if combinationExists {
-				if isFilterZeroWorth {
-					if combinationWorth > 0 {
-						result = append(result, IngridIdsWithWorth{ingridIds: ids, worth: combinationWorth})
-					}
-				} else {
+				if combinationWorth > 0 {
 					result = append(result, IngridIdsWithWorth{ingridIds: ids, worth: combinationWorth})
 				}
 			}
@@ -117,12 +115,12 @@ func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, isFilterZe
 	return &result
 }
 
-func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums []int, isFilterZeroWorth bool) *[]IngridIdsWithWorth {
+func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums []int, enableReduceCoef bool) *[]IngridIdsWithWorth {
 	result := make([]IngridIdsWithWorth, 0)
 
 	for _, num := range ingridNums {
-		tempResult := buildWorthOfCombinationTable(contextPtr, num, isFilterZeroWorth)
-		for _, worth := range *tempResult {
+		resultElem := buildWorthOfCombinationTable(contextPtr, num, enableReduceCoef)
+		for _, worth := range *resultElem {
 			result = append(result, worth)
 		}
 	}

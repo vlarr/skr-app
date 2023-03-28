@@ -4,29 +4,32 @@ import (
 	"flag"
 	"log"
 	"sort"
+	"strconv"
+	"strings"
 )
 
-func containArg(args *[]string, testArg string) bool {
-	for _, arg := range *args {
-		if testArg == arg {
-			return true
-		}
+func parseIntSet(str string) []int {
+	var result []int
+	for _, s := range strings.Split(str, ",") {
+		num, _ := strconv.Atoi(strings.TrimSpace(s))
+		result = append(result, num)
 	}
-	return false
+	return result
 }
 
 func main() {
 	log.Println("hello there")
-
-	contextPtr := readCsvFiles("./effect.csv", "./ingrid.csv")
-
-	ingridIdsWithWorthTable := buildWorthOfCombinationTableForIngridNums(contextPtr, []int{2, 3}, true)
-	ingridNamesWithWorthTable := replaceIngridIdsToNames(contextPtr, ingridIdsWithWorthTable)
-	sort.Sort(byWorth(*ingridNamesWithWorthTable))
-
 	showFlagPtr := flag.Bool("show", false, "show results")
 	saveFlagPtr := flag.Bool("save", false, "save results")
+	reduceCoefFlagPtr := flag.Bool("rc", false, "enable reduce coefficient by ingrid num")
+	numIngridsStrPtr := flag.String("ni", "2", "num ingrids (ets. \"2\", \"2,3\", \"2,3,4\"). default: 2")
 	flag.Parse()
+	numIngrids := parseIntSet(*numIngridsStrPtr)
+
+	contextPtr := readCsvFiles("./effect.csv", "./ingrid.csv")
+	ingridIdsWithWorthTable := buildWorthOfCombinationTableForIngridNums(contextPtr, numIngrids, *reduceCoefFlagPtr)
+	ingridNamesWithWorthTable := replaceIngridIdsToNames(contextPtr, ingridIdsWithWorthTable)
+	sort.Sort(byWorth(*ingridNamesWithWorthTable))
 
 	if *showFlagPtr {
 		showResult(ingridNamesWithWorthTable)
