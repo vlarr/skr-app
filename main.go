@@ -12,7 +12,7 @@ func parseIntSet(str string) []int {
 	var result []int
 	for _, s := range strings.Split(str, ",") {
 		num, err := strconv.Atoi(strings.TrimSpace(s))
-		checkErr(err)
+		checkErr(err, "")
 		result = append(result, num)
 	}
 	return result

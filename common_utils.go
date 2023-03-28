@@ -1,6 +1,8 @@
 package main
 
-import "log"
+import (
+	"log"
+)
 
 func checkUniqueIds(ids []int) bool {
 	idMap := map[int]bool{}
@@ -19,8 +21,8 @@ func equalIdMaps(map1 map[int]bool, map2 map[int]bool) bool {
 	return true
 }
 
-func checkErr(err error) {
+func checkErr(err error, message string) {
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(message, err)
 	}
 }
