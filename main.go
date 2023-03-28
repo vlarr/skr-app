@@ -11,7 +11,8 @@ import (
 func parseIntSet(str string) []int {
 	var result []int
 	for _, s := range strings.Split(str, ",") {
-		num, _ := strconv.Atoi(strings.TrimSpace(s))
+		num, err := strconv.Atoi(strings.TrimSpace(s))
+		checkErr(err)
 		result = append(result, num)
 	}
 	return result

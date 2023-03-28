@@ -27,30 +27,23 @@ type context struct {
 
 func readEffectCsvFile(filePath string) map[int]*effectInfo {
 	f, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal("Unable to read input file "+filePath, err)
-	}
-	defer func(f *os.File) {
-		err := f.Close()
-		checkErr(err)
-	}(f)
+	checkErr(err)
 
 	csvReader := csv.NewReader(f)
 	csvReader.LazyQuotes = true
 	csvReader.Comment = '#'
 	records, err := csvReader.ReadAll()
-
+	checkErr(err)
 	log.Printf("Read %d lines from %s.\n", len(records), filePath)
-	if err != nil {
-		log.Fatal("Unable to parse file as CSV for "+filePath, err)
-	}
 
 	var result = map[int]*effectInfo{}
 
 	for _, record := range records {
-		id, _ := strconv.Atoi(strings.TrimSpace(record[0]))
+		id, err := strconv.Atoi(strings.TrimSpace(record[0]))
+		checkErr(err)
 		name := strings.TrimSpace(record[1])
-		worth, _ := strconv.ParseFloat(strings.TrimSpace(record[2]), 64)
+		worth, err := strconv.ParseFloat(strings.TrimSpace(record[2]), 64)
+		checkErr(err)
 		result[id] = &effectInfo{
 			id:    id,
 			name:  name,
@@ -63,33 +56,29 @@ func readEffectCsvFile(filePath string) map[int]*effectInfo {
 
 func readIngridCsvFile(filePath string) map[int]*ingridInfo {
 	f, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal("Unable to read input file "+filePath, err)
-	}
-	defer func(f *os.File) {
-		err := f.Close()
-		checkErr(err)
-	}(f)
+	checkErr(err)
 
 	csvReader := csv.NewReader(f)
 	csvReader.LazyQuotes = true
 	csvReader.Comment = '#'
 	records, err := csvReader.ReadAll()
-
+	checkErr(err)
 	log.Printf("Read %d lines from %s.\n", len(records), filePath)
-	if err != nil {
-		log.Fatal("Unable to parse file as CSV for "+filePath, err)
-	}
 
 	var result = map[int]*ingridInfo{}
 
 	for _, record := range records {
-		id, _ := strconv.Atoi(strings.TrimSpace(record[0]))
+		id, err := strconv.Atoi(strings.TrimSpace(record[0]))
+		checkErr(err)
 		name := strings.TrimSpace(record[1])
-		eff1, _ := strconv.Atoi(strings.TrimSpace(record[2]))
-		eff2, _ := strconv.Atoi(strings.TrimSpace(record[3]))
-		eff3, _ := strconv.Atoi(strings.TrimSpace(record[4]))
-		eff4, _ := strconv.Atoi(strings.TrimSpace(record[5]))
+		eff1, err := strconv.Atoi(strings.TrimSpace(record[2]))
+		checkErr(err)
+		eff2, err := strconv.Atoi(strings.TrimSpace(record[3]))
+		checkErr(err)
+		eff3, err := strconv.Atoi(strings.TrimSpace(record[4]))
+		checkErr(err)
+		eff4, err := strconv.Atoi(strings.TrimSpace(record[5]))
+		checkErr(err)
 
 		result[id] = &ingridInfo{
 			id:          id,
