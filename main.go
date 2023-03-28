@@ -20,14 +20,18 @@ func parseIntSet(str string) []int {
 
 func main() {
 	log.Println("hello there")
-	showFlagPtr := flag.Bool("show", false, "show results")
-	saveFlagPtr := flag.Bool("save", false, "save results")
+	showFlagPtr := flag.Bool("show", false, "show results in console")
+	saveFlagPtr := flag.Bool("save", false, "save results to output file")
 	reduceCoefFlagPtr := flag.Bool("rc", false, "enable reduce coefficient by ingrid num")
-	numIngridsStrPtr := flag.String("ni", "2", "num ingrids (ets. \"2\", \"2,3\", \"2,3,4\"). default: 2")
+	numIngridsStrPtr := flag.String("ni", "2,3", "num ingrids (ets. \"2\", \"2,3\", \"2,3,4\").")
+	effectCsvFileNamePtr := flag.String("effect-csv", "effect.csv", "effect csv file name.")
+	ingridCsvFileNamePtr := flag.String("ingrid-csv", "ingrid.csv", "ingrid csv file name.")
+	outputFileNamePtr := flag.String("output-file", "output.txt", "output file name.")
+
 	flag.Parse()
 	numIngrids := parseIntSet(*numIngridsStrPtr)
 
-	contextPtr := readCsvFiles("./effect.csv", "./ingrid.csv")
+	contextPtr := readCsvFiles(*effectCsvFileNamePtr, *ingridCsvFileNamePtr)
 	ingridIdsWithWorthTable := buildWorthOfCombinationTableForIngridNums(contextPtr, numIngrids, *reduceCoefFlagPtr)
 	ingridNamesWithWorthTable := replaceIngridIdsToNames(contextPtr, ingridIdsWithWorthTable)
 	sort.Sort(byWorth(*ingridNamesWithWorthTable))
@@ -36,6 +40,6 @@ func main() {
 		showResult(ingridNamesWithWorthTable)
 	}
 	if *saveFlagPtr {
-		saveResultToFile(ingridNamesWithWorthTable, "./output.txt")
+		saveResultToFile(ingridNamesWithWorthTable, *outputFileNamePtr)
 	}
 }
