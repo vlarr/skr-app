@@ -11,10 +11,10 @@ type Potion struct {
 	profit      float64
 }
 
-func findPotionsWithWorthForIngridNums(contextPtr *context, ingridNums []int, lang string) []*Potion {
+func findPotionsWithWorthForIngridNums(contextPtr *context, ingridNums []int) []*Potion {
 	result := make([]*Potion, 0)
 	for _, num := range ingridNums {
-		resultElem := findPotionsWithWorthForIngridNum(contextPtr, num, lang)
+		resultElem := findPotionsWithWorthForIngridNum(contextPtr, num)
 		for _, worth := range resultElem {
 			result = append(result, worth)
 		}
@@ -22,7 +22,7 @@ func findPotionsWithWorthForIngridNums(contextPtr *context, ingridNums []int, la
 	return result
 }
 
-func findPotionsWithWorthForIngridNum(contextPtr *context, ingridNum int, lang string) []*Potion {
+func findPotionsWithWorthForIngridNum(contextPtr *context, ingridNum int) []*Potion {
 	result := make([]*Potion, 0)
 
 	stockIngridIds := make([]int, len(contextPtr.ingridIdToStockInfoMap))
@@ -43,7 +43,7 @@ func findPotionsWithWorthForIngridNum(contextPtr *context, ingridNum int, lang s
 		if potionPtr != nil {
 			potionPtr.cost = calculateCost(contextPtr, currentIngridIds...)
 			potionPtr.profit = potionPtr.worth - potionPtr.cost
-			potionPtr.ingridNames = findIngridNames(contextPtr, lang, potionPtr.ingridIds)
+			potionPtr.ingridNames = findIngridNames(contextPtr, potionPtr.ingridIds)
 			result = append(result, potionPtr)
 		}
 
@@ -120,19 +120,14 @@ func calculateCost(contextPtr *context, ingridIds ...int) float64 {
 	return result
 }
 
-func findIngridNames(contextPtr *context, lang string, ingridIds []int) []string {
+func findIngridNames(contextPtr *context, ingridIds []int) []string {
 	ingridNames := make([]string, len(ingridIds))
 	for j := 0; j < len(ingridNames); j++ {
 		defName := contextPtr.ingridIdToInfoMap[ingridIds[j]].name
-		langName := ""
+		alternativeName := contextPtr.ingridIdToInfoMap[ingridIds[j]].alternativeName
 
-		switch lang {
-		case langRus:
-			langName = contextPtr.ingridIdToInfoMap[ingridIds[j]].nameRus
-		}
-
-		if len(langName) > 0 {
-			ingridNames[j] = langName
+		if len(alternativeName) > 0 {
+			ingridNames[j] = alternativeName
 		} else {
 			ingridNames[j] = defName
 		}

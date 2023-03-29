@@ -8,8 +8,6 @@ import (
 	"strings"
 )
 
-const langRus = "rus"
-
 func parseIntArray(str string) []int {
 	var result []int
 	for _, s := range strings.Split(str, ",") {
@@ -30,13 +28,12 @@ func main() {
 	stockCsvFileNamePtr := flag.String("stock-csv", "stock.csv", "stock csv file name")
 	outputFileNamePtr := flag.String("output-file", "output.txt", "output file name.")
 	limitPtr := flag.Int("limit", 20, "limit first values.")
-	langPtr := flag.String("lang", "eng", "language (\"eng\" or \"rus\")")
 
 	flag.Parse()
 	numIngrids := parseIntArray(*numIngridsStrPtr)
 
-	contextPtr := readCsvFiles(*effectCsvFileNamePtr, *ingridCsvFileNamePtr, *stockCsvFileNamePtr, *langPtr)
-	potionsSlicePtr := findPotionsWithWorthForIngridNums(contextPtr, numIngrids, *langPtr)
+	contextPtr := readCsvFiles(*effectCsvFileNamePtr, *ingridCsvFileNamePtr, *stockCsvFileNamePtr)
+	potionsSlicePtr := findPotionsWithWorthForIngridNums(contextPtr, numIngrids)
 	sort.Sort(byProfit(potionsSlicePtr))
 
 	if *showFlagPtr {

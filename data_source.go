@@ -16,12 +16,12 @@ type effectInfo struct {
 }
 
 type ingridInfo struct {
-	name        string
-	cost        float64
-	effectCodes [4]string
-	nameRus     string
-	id          int
-	effectIds   [4]int
+	name            string
+	cost            float64
+	effectCodes     [4]string
+	alternativeName string
+	id              int
+	effectIds       [4]int
 }
 
 type stockInfo struct {
@@ -31,12 +31,12 @@ type stockInfo struct {
 }
 
 type context struct {
-	effectCodeToInfoMap     map[string]*effectInfo
-	effectIdToInfoMap       map[int]*effectInfo
-	ingridIdToInfoMap       map[int]*ingridInfo
-	ingridNameToInfoMap     map[string]*ingridInfo
-	ingridLangNameToInfoMap map[string]*ingridInfo
-	ingridIdToStockInfoMap  map[int]*stockInfo
+	effectCodeToInfoMap            map[string]*effectInfo
+	effectIdToInfoMap              map[int]*effectInfo
+	ingridIdToInfoMap              map[int]*ingridInfo
+	ingridNameToInfoMap            map[string]*ingridInfo
+	ingridAlternativeNameToInfoMap map[string]*ingridInfo
+	ingridIdToStockInfoMap         map[int]*stockInfo
 }
 
 func (c *context) readEffectCsvFile(filePath string) {
@@ -96,15 +96,15 @@ func (c *context) readIngridCsvFile(filePath string) {
 		eff3Id := c.effectCodeToInfoMap[eff3Code].id
 		eff4Code := strings.TrimSpace(record[5])
 		eff4Id := c.effectCodeToInfoMap[eff4Code].id
-		nameRus := strings.TrimSpace(record[6])
+		alternativeName := strings.TrimSpace(record[6])
 
 		ingridInfoPtr := &ingridInfo{
-			id:          id,
-			name:        name,
-			cost:        cost,
-			effectCodes: [4]string{eff1Code, eff2Code, eff3Code, eff4Code},
-			effectIds:   [4]int{eff1Id, eff2Id, eff3Id, eff4Id},
-			nameRus:     nameRus,
+			id:              id,
+			name:            name,
+			cost:            cost,
+			effectCodes:     [4]string{eff1Code, eff2Code, eff3Code, eff4Code},
+			effectIds:       [4]int{eff1Id, eff2Id, eff3Id, eff4Id},
+			alternativeName: alternativeName,
 		}
 
 		c.ingridIdToInfoMap[id] = ingridInfoPtr
@@ -135,7 +135,7 @@ func (c *context) readStockCsvFile(fileName string) {
 			checkErr(err, "")
 		}
 
-		var ingridInfoPtr = c.ingridLangNameToInfoMap[ingridName]
+		var ingridInfoPtr = c.ingridAlternativeNameToInfoMap[ingridName]
 		if ingridInfoPtr == nil {
 			ingridInfoPtr = c.ingridNameToInfoMap[ingridName]
 		}
@@ -152,25 +152,20 @@ func (c *context) readStockCsvFile(fileName string) {
 	}
 }
 
-func (c *context) updateLangNameIndex(lang string) {
-	c.ingridLangNameToInfoMap = map[string]*ingridInfo{}
+func (c *context) updateAlternativeNameIndex() {
+	c.ingridAlternativeNameToInfoMap = map[string]*ingridInfo{}
 	for _, info := range c.ingridNameToInfoMap {
-		switch lang {
-		case langRus:
-			if len(info.nameRus) > 0 {
-				c.ingridLangNameToInfoMap[info.nameRus] = info
-			}
-		default:
-			c.ingridLangNameToInfoMap[info.name] = info
+		if len(info.alternativeName) > 0 {
+			c.ingridAlternativeNameToInfoMap[info.alternativeName] = info
 		}
 	}
 }
 
-func readCsvFiles(effectCsvPath string, ingridCsvPath string, stockCsvPath string, lang string) *context {
+func readCsvFiles(effectCsvPath string, ingridCsvPath string, stockCsvPath string) *context {
 	result := new(context)
 	result.readEffectCsvFile(effectCsvPath)
 	result.readIngridCsvFile(ingridCsvPath)
-	result.updateLangNameIndex(lang)
+	result.updateAlternativeNameIndex()
 	result.readStockCsvFile(stockCsvPath)
 	return result
 }

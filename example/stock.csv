@@ -1,4 +1,4 @@
-# Ingredient name (or lang name, etc. "Голубой горноцвет"), Amount (from 0.0 to 1.0. default 1.0)
+# Ingredient name (or national lang name from 'ingredients.csv'), Amount (> 0.0 . default 1.0)
 Abecean Longfin,1.0
 Bear Claws,1.0
 Bee,1.0
