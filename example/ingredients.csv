@@ -1,93 +1,93 @@
-# Ingredient Name,Value,Effect1,...
-Abecean Longfin,15,WFr,FSn,WPo,FRe
-Bear Claws,2,RSt,FHe,F1h,DMr
-Bee,3,RSt,ASt,ESt,WSh
-Beehive Husk,5,TPo,FLa,FSn,FDe
-Bleeding Crown,10,WFi,FBl,WPo,TMa
-Blisterwort,12,DSt,Z,RHe,FSm
-Blue Butterfly Wing,2,DSt,FCo,DMr,FEn
-Blue Dartwing,1,TSh,FPp,RHe,F
-Blue Mountain Flower,2,RHe,FCo,FHe,DMr
-Bone Meal,5,DSt,TFi,FCo,ASt
-Briar Heart,20,RMa,FBl,P,FMa
-Butterfly Wing,3,RHe,FBa,LSt,DMa
-Canis Root,5,DSt,F1h,FMm,P
-Charred Skeever Hide,1,RSt,CDi,TPo,RHe
-Chaurus Eggs,10,WPo,FSt,DMa,I
-Chicken's Egg,2,TMa,DMr,W,LSt
-Creep Cluster,1,RMa,DSt,FCw,WMa
-Crimson Nimroot,10,DHe,DSt,I,TMa
-Cyrodilic Spadetail,15,DSt,FRe,F,AHe
-Daedra Heart,250,RHe,DSr,DMa,D
-Deathbell,4,DHe,ASt,S,WPo
-Dragon's Tongue,5,TFi,FBa,FIl,F2h
-Dwarven Oil,15,WMa,FIl,EMa,RMa
-Ectoplasm,25,RMa,FDe,FMa,DHe
-Elves Ear,10,RMa,FMm,WFr,TFi
-Eye of Sabre Cat,2,RSt,AHe,DMa,RHe
-Falmer Ear,10,DHe,F,TPo,FLp
-Fire Salts,50,WFr,TFi,RMa,EMa
-Fly Amantita,2,TFi,F2h,F,ESt
-Frost Mirriam,1,TFr,FSn,AMa,DSr
-Frost Salts,100,WFi,TFr,RMa,FCo
-Garlic,1,TPo,FSt,EMa,EHe
-Giant Lichen,5,WSh,AHe,WPo,RMa
-Giant's Toe,20,DSt,FHe,FCw,DSr
-Glow Dust,20,DMa,DMr,FDe,TSh
-Glowing Mushroom,5,TSh,FDe,FSm,FHe
-Grass Pod,1,TPo,AMa,FAl,RMa
-Hagraven Claw,20,TMa,LMa,FEn,FBa
-Hagraven Feathers,20,DMa,FCo,F,WSh
-Hanging Moss,1,DMa,FHe,DMr,F1h
-Hawk Beak,15,RSt,TFr,FCw,TSh
-Hawk Feathers,15,CDi,FLa,F1h,FSn
-Histcarp,6,RSt,FMa,DSr,W
-Honeycomb,6,RSt,FBl,FLa,ASt
-Human Flesh,1,DHe,P,RMa,FSn
-Human Heart,0,DHe,DMa,DMr,F
-Ice Wraith Teeth,30,WFr,FHa,I,WFi
-Imp Stool,0,DHe,LHe,P,RHe
-Jarrin Root,10,DHe,DMa,DSt,DMr
-Jazbay Grapes,1,WMa,FMa,EMa,AHe
-Juniper Berries,1,WFi,FMm,EHe,DSr
-Large Antlers,2,RSt,FSt,S,DSr
-Lavender,1,TMa,FSt,AMa,FCo
-Luna Moth Wing,5,DMa,FLa,EHe,I
-Moon Sugar,50,WFi,TFr,RMa,EMa
-Mora Tapinella,4,RMa,LHe,ESt,FIl
-Mudcrab Chitin,2,RSt,CDi,TPo,TFi
-Namira's Rot,0,DMa,FLp,F,EHe
-Nightshade,8,DHe,DMr,LSt,FDe
-Nirnroot,10,DHe,DSt,I,TMa
-Nordic Barnacle,5,DMa,W,EHe,FPp
-Orange Dartwing,1,RSt,AMa,FPp,LHe
-Pearl,2,RSt,FBl,RMa,TSh
-Pine Thrush Egg,2,RSt,FLp,WPo,TSh
-Powdered Mammoth Tusk,2,RSt,FSn,WFi,F
-Purple Mountain Flower,2,RSt,FSn,LMa,TFr
-Red Mountain Flower,2,RMa,AMa,FMa,DHe
-River Betty,15,DHe,FAl,S,FCw
-Rock Warbler Egg,2,RHe,F1h,DSt,WMa
-Sabre Cat Tooth,2,RSt,FHa,FSm,WPo
-Salt Pile,2,WMa,FRe,S,EMa
-Scaly Pholiota,4,WMa,FIl,ESt,FCw
-Silverside Perch,15,RSt,DSr,AHe,TFr
-Skeever Tail,3,DSt,AHe,DHe,FLa
-Slaugherfish Egg,3,TPo,FPp,LHe,FSt
-Slaugherfish Scales,3,TFr,LHe,FHa,FBl
-Small Antlers,2,WPo,FRe,LSt,DHe
-Small Pearl,2,RSt,F1h,FRe,TFr
-Snowberries,4,TFi,FEn,TFr,TSh
-Spider Egg,5,DSt,DMr,FLp,FMm
-Spriggan Sap,5,DMr,FEn,FSm,FAl
-Swamp Fungal Pod,3,TSh,LMa,P,RHe
-Taproot,15,WMa,FIl,EMa,RMa
-Thistle Branch,1,TFr,ASt,TPo,FHa
-Torchbug Thorax,1,RSt,LMa,WMa,FSt
-Troll Fat,15,TPo,F2h,F,DHe
-Tundra Cotton,1,TMa,FMa,FBl,FBa
-Vampire Dust,25,I,RMa,EHe,CDi
-Void Salts,125,WSh,TMa,DHe,FMa
-Wheat,5,RHe,FHe,DSr,LMa
-White Cap,0,WFr,FHa,RMa,AMa
-Wisp Wrappings,2,RSt,FDe,FCw,TMa
+# Ingredient Name,Value,Effect1,Effect1,Effect1,Effect1,Ingredient Name Rus
+Abecean Longfin,15,WFr,FSn,WPo,FRe,
+Bear Claws,2,RSt,FHe,F1h,DMr,
+Bee,3,RSt,ASt,ESt,WSh,
+Beehive Husk,5,TPo,FLa,FSn,FDe,
+Bleeding Crown,10,WFi,FBl,WPo,TMa,
+Blisterwort,12,DSt,Z,RHe,FSm,
+Blue Butterfly Wing,2,DSt,FCo,DMr,FEn,
+Blue Dartwing,1,TSh,FPp,RHe,F,
+Blue Mountain Flower,2,RHe,FCo,FHe,DMr,
+Bone Meal,5,DSt,TFi,FCo,ASt,
+Briar Heart,20,RMa,FBl,P,FMa,
+Butterfly Wing,3,RHe,FBa,LSt,DMa,
+Canis Root,5,DSt,F1h,FMm,P,
+Charred Skeever Hide,1,RSt,CDi,TPo,RHe,
+Chaurus Eggs,10,WPo,FSt,DMa,I,
+Chicken's Egg,2,TMa,DMr,W,LSt,
+Creep Cluster,1,RMa,DSt,FCw,WMa,
+Crimson Nimroot,10,DHe,DSt,I,TMa,
+Cyrodilic Spadetail,15,DSt,FRe,F,AHe,
+Daedra Heart,250,RHe,DSr,DMa,D,
+Deathbell,4,DHe,ASt,S,WPo,
+Dragon's Tongue,5,TFi,FBa,FIl,F2h,
+Dwarven Oil,15,WMa,FIl,EMa,RMa,
+Ectoplasm,25,RMa,FDe,FMa,DHe,
+Elves Ear,10,RMa,FMm,WFr,TFi,
+Eye of Sabre Cat,2,RSt,AHe,DMa,RHe,
+Falmer Ear,10,DHe,F,TPo,FLp,
+Fire Salts,50,WFr,TFi,RMa,EMa,
+Fly Amantita,2,TFi,F2h,F,ESt,
+Frost Mirriam,1,TFr,FSn,AMa,DSr,
+Frost Salts,100,WFi,TFr,RMa,FCo,
+Garlic,1,TPo,FSt,EMa,EHe,
+Giant Lichen,5,WSh,AHe,WPo,RMa,
+Giant's Toe,20,DSt,FHe,FCw,DSr,
+Glow Dust,20,DMa,DMr,FDe,TSh,
+Glowing Mushroom,5,TSh,FDe,FSm,FHe,
+Grass Pod,1,TPo,AMa,FAl,RMa,
+Hagraven Claw,20,TMa,LMa,FEn,FBa,
+Hagraven Feathers,20,DMa,FCo,F,WSh,
+Hanging Moss,1,DMa,FHe,DMr,F1h,
+Hawk Beak,15,RSt,TFr,FCw,TSh,
+Hawk Feathers,15,CDi,FLa,F1h,FSn,
+Histcarp,6,RSt,FMa,DSr,W,
+Honeycomb,6,RSt,FBl,FLa,ASt,
+Human Flesh,1,DHe,P,RMa,FSn,
+Human Heart,0,DHe,DMa,DMr,F,
+Ice Wraith Teeth,30,WFr,FHa,I,WFi,
+Imp Stool,0,DHe,LHe,P,RHe,
+Jarrin Root,10,DHe,DMa,DSt,DMr,
+Jazbay Grapes,1,WMa,FMa,EMa,AHe,
+Juniper Berries,1,WFi,FMm,EHe,DSr,
+Large Antlers,2,RSt,FSt,S,DSr,
+Lavender,1,TMa,FSt,AMa,FCo,
+Luna Moth Wing,5,DMa,FLa,EHe,I,
+Moon Sugar,50,WFi,TFr,RMa,EMa,
+Mora Tapinella,4,RMa,LHe,ESt,FIl,
+Mudcrab Chitin,2,RSt,CDi,TPo,TFi,
+Namira's Rot,0,DMa,FLp,F,EHe,
+Nightshade,8,DHe,DMr,LSt,FDe,
+Nirnroot,10,DHe,DSt,I,TMa,
+Nordic Barnacle,5,DMa,W,EHe,FPp,
+Orange Dartwing,1,RSt,AMa,FPp,LHe,
+Pearl,2,RSt,FBl,RMa,TSh,
+Pine Thrush Egg,2,RSt,FLp,WPo,TSh,
+Powdered Mammoth Tusk,2,RSt,FSn,WFi,F,
+Purple Mountain Flower,2,RSt,FSn,LMa,TFr,
+Red Mountain Flower,2,RMa,AMa,FMa,DHe,
+River Betty,15,DHe,FAl,S,FCw,
+Rock Warbler Egg,2,RHe,F1h,DSt,WMa,
+Sabre Cat Tooth,2,RSt,FHa,FSm,WPo,
+Salt Pile,2,WMa,FRe,S,EMa,
+Scaly Pholiota,4,WMa,FIl,ESt,FCw,
+Silverside Perch,15,RSt,DSr,AHe,TFr,
+Skeever Tail,3,DSt,AHe,DHe,FLa,
+Slaugherfish Egg,3,TPo,FPp,LHe,FSt,
+Slaugherfish Scales,3,TFr,LHe,FHa,FBl,
+Small Antlers,2,WPo,FRe,LSt,DHe,
+Small Pearl,2,RSt,F1h,FRe,TFr,
+Snowberries,4,TFi,FEn,TFr,TSh,
+Spider Egg,5,DSt,DMr,FLp,FMm,
+Spriggan Sap,5,DMr,FEn,FSm,FAl,
+Swamp Fungal Pod,3,TSh,LMa,P,RHe,
+Taproot,15,WMa,FIl,EMa,RMa,
+Thistle Branch,1,TFr,ASt,TPo,FHa,
+Torchbug Thorax,1,RSt,LMa,WMa,FSt,
+Troll Fat,15,TPo,F2h,F,DHe,
+Tundra Cotton,1,TMa,FMa,FBl,FBa,
+Vampire Dust,25,I,RMa,EHe,CDi,
+Void Salts,125,WSh,TMa,DHe,FMa,
+Wheat,5,RHe,FHe,DSr,LMa,
+White Cap,0,WFr,FHa,RMa,AMa,
+Wisp Wrappings,2,RSt,FDe,FCw,TMa,

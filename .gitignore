@@ -6,3 +6,4 @@ local
 example/**/*
 !**/example/effects.csv
 !**/example/ingredients.csv
+!**/example/stock.csv

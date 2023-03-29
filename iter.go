@@ -5,7 +5,7 @@ type Iter struct {
 	indexes   []int
 }
 
-func createIter(size int, allValues *[]int) Iter {
+func createIterator(size int, allValues *[]int) Iter {
 	return Iter{
 		indexes:   make([]int, size),
 		allValues: allValues,

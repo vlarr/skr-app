@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const langRus = "rus"
+
 func parseIntArray(str string) []int {
 	var result []int
 	for _, s := range strings.Split(str, ",") {
@@ -22,25 +24,25 @@ func main() {
 	log.Println("hello there")
 	showFlagPtr := flag.Bool("show", false, "show results in console")
 	saveFlagPtr := flag.Bool("save", false, "save results to output file")
-	reduceCoefFlagPtr := flag.Bool("rc", false, "enable reduce coefficient by ingrid num")
 	numIngridsStrPtr := flag.String("ni", "2,3", "num ingrids (ets. \"2\", \"2,3\", \"2,3,4\").")
 	effectCsvFileNamePtr := flag.String("effect-csv", "effects.csv", "effect csv file name.")
 	ingridCsvFileNamePtr := flag.String("ingrid-csv", "ingredients.csv", "ingrid csv file name.")
+	stockCsvFileNamePtr := flag.String("stock-csv", "stock.csv", "stock csv file name")
 	outputFileNamePtr := flag.String("output-file", "output.txt", "output file name.")
 	limitPtr := flag.Int("limit", 20, "limit first values.")
+	langPtr := flag.String("lang", "eng", "language (\"eng\" or \"rus\")")
 
 	flag.Parse()
 	numIngrids := parseIntArray(*numIngridsStrPtr)
 
-	contextPtr := readCsvFiles(*effectCsvFileNamePtr, *ingridCsvFileNamePtr)
-	ingridIdsWithWorthTable := buildWorthOfCombinationTableForIngridNums(contextPtr, numIngrids, *reduceCoefFlagPtr)
-	ingridNamesWithWorthTable := replaceIngridIdsToNames(contextPtr, ingridIdsWithWorthTable)
-	sort.Sort(byWorth(*ingridNamesWithWorthTable))
+	contextPtr := readCsvFiles(*effectCsvFileNamePtr, *ingridCsvFileNamePtr, *stockCsvFileNamePtr, *langPtr)
+	potionsSlicePtr := findPotionsWithWorthForIngridNums(contextPtr, numIngrids, *langPtr)
+	sort.Sort(byProfit(potionsSlicePtr))
 
 	if *showFlagPtr {
-		showResult(ingridNamesWithWorthTable, *limitPtr)
+		showResult(potionsSlicePtr, *limitPtr)
 	}
 	if *saveFlagPtr {
-		saveResultToFile(ingridNamesWithWorthTable, *outputFileNamePtr, *limitPtr)
+		saveResultToFile(potionsSlicePtr, *outputFileNamePtr, *limitPtr)
 	}
 }

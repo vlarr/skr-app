@@ -1,3 +1,3 @@
-### Steps:
-1. Change workdir to "example". 
-2. Change "Program arguments". Example run arguments:```--show --save -ni=2,3```
+1. Open gitbash from ```./scripts```
+2. Run ```. ./build.sh``` (need installed "go")
+3. Run ```. ./run-example.sh```

@@ -1,3 +1,3 @@
 pushd ../example
-../bin/skr-app.exe --save
+../bin/skr-app.exe --show --save -ni=2,3
 popd

@@ -3,28 +3,94 @@ package main
 const unknownEffectId = 0
 const otherEffectId = 1
 
-type IngridIdsWorth struct {
-	ingridIds []int
-	worth     float64
+type Potion struct {
+	ingridIds   []int
+	ingridNames []string
+	worth       float64
+	cost        float64
+	profit      float64
 }
 
-type IngridNamesWorth struct {
-	ingridNamesPtr *[]string
-	worth          float64
+func findPotionsWithWorthForIngridNums(contextPtr *context, ingridNums []int, lang string) []*Potion {
+	result := make([]*Potion, 0)
+	for _, num := range ingridNums {
+		resultElem := findPotionsWithWorthForIngridNum(contextPtr, num, lang)
+		for _, worth := range resultElem {
+			result = append(result, worth)
+		}
+	}
+	return result
 }
 
-type byWorth []IngridNamesWorth
+func findPotionsWithWorthForIngridNum(contextPtr *context, ingridNum int, lang string) []*Potion {
+	result := make([]*Potion, 0)
 
-func (s byWorth) Len() int {
-	return len(s)
+	stockIngridIds := make([]int, len(contextPtr.ingridIdToStockInfoMap))
+	{
+		i := 0
+		for id := range contextPtr.ingridIdToStockInfoMap {
+			stockIngridIds[i] = id
+			i++
+		}
+	}
+
+	idSliceIterator := createIterator(ingridNum, &stockIngridIds)
+	isNext := true
+
+	for isNext {
+		currentIngridIds := idSliceIterator.getValues()
+		potionPtr := tryMakePotion(contextPtr, currentIngridIds)
+		if potionPtr != nil {
+			potionPtr.cost = calculateCost(contextPtr, currentIngridIds...)
+			potionPtr.profit = potionPtr.worth - potionPtr.cost
+			potionPtr.ingridNames = findIngridNames(contextPtr, lang, potionPtr.ingridIds)
+			result = append(result, potionPtr)
+		}
+
+		isNext, idSliceIterator = idSliceIterator.next()
+	}
+
+	return result
 }
 
-func (s byWorth) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
+func tryMakePotion(contextPtr *context, ids []int) *Potion {
+	if simpleValidateIngridIdsByOrder(ids) && validateIngridByActiveEffects(contextPtr, ids) {
+		combinationExists, combinationWorth := calculateWorth(contextPtr, ids...)
+		if combinationExists {
+			if combinationWorth > 0 {
+				return &Potion{ingridIds: ids, worth: combinationWorth}
+			}
+		}
+	}
+	return nil
 }
 
-func (s byWorth) Less(i, j int) bool {
-	return s[i].worth > s[j].worth
+func calculateWorth(contextPtr *context, ingridIds ...int) (exists bool, worth float64) {
+	if !checkUniqueIds(ingridIds) || len(ingridIds) < 2 {
+		panic(1)
+	}
+
+	effectIds := findActiveEffectsByIngridIds(contextPtr, ingridIds...)
+	if len(effectIds) == 0 {
+		return false, 0.0
+	}
+
+	var result = 0.0
+	for id := range effectIds {
+		result += contextPtr.effectIdToInfoMap[id].worth
+	}
+
+	return true, result
+}
+
+func findActiveEffectsByIngridIds(contextPtr *context, ingridIds ...int) map[int]bool {
+	var ingridEffectsTable [][4]int
+	for _, ingridId := range ingridIds {
+		effectIdArr := contextPtr.ingridIdToInfoMap[ingridId].effectIds
+		ingridEffectsTable = append(ingridEffectsTable, effectIdArr)
+	}
+
+	return findActiveEffectsByIngridEffects(ingridEffectsTable...)
 }
 
 func findActiveEffectsByIngridEffects(ingridEffectsTable ...[4]int) map[int]bool {
@@ -45,99 +111,31 @@ func findActiveEffectsByIngridEffects(ingridEffectsTable ...[4]int) map[int]bool
 	return result
 }
 
-func findActiveEffectsByIngridIds(contextPtr *context, ingridIds ...int) map[int]bool {
-	var ingridEffectsTable [][4]int
-	for _, ingridId := range ingridIds {
-		effectIdArr := contextPtr.ingridIdToInfoMap[ingridId].effectIds
-		ingridEffectsTable = append(ingridEffectsTable, effectIdArr)
+func calculateCost(contextPtr *context, ingridIds ...int) float64 {
+	result := 0.0
+	for _, id := range ingridIds {
+		cost := contextPtr.ingridIdToInfoMap[id].cost / contextPtr.ingridIdToStockInfoMap[id].amount
+		result += cost
 	}
-
-	return findActiveEffectsByIngridEffects(ingridEffectsTable...)
+	return result
 }
 
-func calculateWorth(contextPtr *context, enableReduceCoef bool, ingridIds ...int) (exists bool, worth float64) {
-	if !checkUniqueIds(ingridIds) || len(ingridIds) < 2 {
-		panic(1)
-	}
+func findIngridNames(contextPtr *context, lang string, ingridIds []int) []string {
+	ingridNames := make([]string, len(ingridIds))
+	for j := 0; j < len(ingridNames); j++ {
+		defName := contextPtr.ingridIdToInfoMap[ingridIds[j]].name
+		langName := ""
 
-	effectIds := findActiveEffectsByIngridIds(contextPtr, ingridIds...)
-	if len(effectIds) == 0 {
-		return false, 0.0
-	}
-
-	var result = 0.0
-	for id := range effectIds {
-		result = result + contextPtr.effectIdToInfoMap[id].worth
-	}
-
-	if enableReduceCoef {
-		reduceWorthCoef := 2.0 / float64(len(ingridIds))
-		result = result * reduceWorthCoef
-	}
-
-	return true, result
-}
-
-func buildWorthOfCombinationTable(contextPtr *context, ingridNum int, enableReduceCoef bool) *[]IngridIdsWorth {
-	result := make([]IngridIdsWorth, 0)
-
-	ingridIds := make([]int, len(contextPtr.ingridIdToInfoMap))
-	{
-		i := 0
-		for id := range contextPtr.ingridIdToInfoMap {
-			ingridIds[i] = id
-			i++
-		}
-	}
-
-	iter := createIter(ingridNum, &ingridIds)
-	isNext := true
-
-	for isNext {
-		ids := iter.getValues()
-		if simpleValidateIngridIdsByOrder(ids) && validateIngridByActiveEffects(contextPtr, ids) {
-			combinationExists, combinationWorth := calculateWorth(contextPtr, enableReduceCoef, ids...)
-			if combinationExists {
-				if combinationWorth > 0 {
-					result = append(result, IngridIdsWorth{ingridIds: ids, worth: combinationWorth})
-				}
-			}
+		switch lang {
+		case langRus:
+			langName = contextPtr.ingridIdToInfoMap[ingridIds[j]].nameRus
 		}
 
-		isNext, iter = iter.next()
-	}
-
-	return &result
-}
-
-func buildWorthOfCombinationTableForIngridNums(contextPtr *context, ingridNums []int, enableReduceCoef bool) *[]IngridIdsWorth {
-	result := make([]IngridIdsWorth, 0)
-
-	for _, num := range ingridNums {
-		resultElem := buildWorthOfCombinationTable(contextPtr, num, enableReduceCoef)
-		for _, worth := range *resultElem {
-			result = append(result, worth)
+		if len(langName) > 0 {
+			ingridNames[j] = langName
+		} else {
+			ingridNames[j] = defName
 		}
 	}
-
-	return &result
-}
-
-func replaceIngridIdsToNames(contextPtr *context, ingridIdsWithWorthPtr *[]IngridIdsWorth) *[]IngridNamesWorth {
-	result := make([]IngridNamesWorth, len(*ingridIdsWithWorthPtr))
-	i := 0
-	for _, elem := range *ingridIdsWithWorthPtr {
-		ingridNames := make([]string, len(elem.ingridIds))
-
-		for j := 0; j < len(ingridNames); j++ {
-			ingridNames[j] = contextPtr.ingridIdToInfoMap[elem.ingridIds[j]].name
-		}
-
-		result[i] = IngridNamesWorth{
-			ingridNamesPtr: &ingridNames,
-			worth:          elem.worth,
-		}
-		i++
-	}
-	return &result
+	return ingridNames
 }
