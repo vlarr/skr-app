@@ -4,5 +4,5 @@ bin
 local
 
 example/**/*
-!**/example/effect.csv
-!**/example/ingrid.csv
+!**/example/effects.csv
+!**/example/ingredients.csv

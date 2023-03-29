@@ -48,7 +48,7 @@ func findActiveEffectsByIngridEffects(ingridEffectsTable ...[4]int) map[int]bool
 func findActiveEffectsByIngridIds(contextPtr *context, ingridIds ...int) map[int]bool {
 	var ingridEffectsTable [][4]int
 	for _, ingridId := range ingridIds {
-		effectIdArr := contextPtr.ingridIdToInfoMap[ingridId].effectIdArr
+		effectIdArr := contextPtr.ingridIdToInfoMap[ingridId].effectIds
 		ingridEffectsTable = append(ingridEffectsTable, effectIdArr)
 	}
 

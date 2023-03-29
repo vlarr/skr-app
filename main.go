@@ -24,9 +24,10 @@ func main() {
 	saveFlagPtr := flag.Bool("save", false, "save results to output file")
 	reduceCoefFlagPtr := flag.Bool("rc", false, "enable reduce coefficient by ingrid num")
 	numIngridsStrPtr := flag.String("ni", "2,3", "num ingrids (ets. \"2\", \"2,3\", \"2,3,4\").")
-	effectCsvFileNamePtr := flag.String("effect-csv", "effect.csv", "effect csv file name.")
-	ingridCsvFileNamePtr := flag.String("ingrid-csv", "ingrid.csv", "ingrid csv file name.")
+	effectCsvFileNamePtr := flag.String("effect-csv", "effects.csv", "effect csv file name.")
+	ingridCsvFileNamePtr := flag.String("ingrid-csv", "ingredients.csv", "ingrid csv file name.")
 	outputFileNamePtr := flag.String("output-file", "output.txt", "output file name.")
+	limitPtr := flag.Int("limit", 20, "limit first values.")
 
 	flag.Parse()
 	numIngrids := parseIntArray(*numIngridsStrPtr)
@@ -37,9 +38,9 @@ func main() {
 	sort.Sort(byWorth(*ingridNamesWithWorthTable))
 
 	if *showFlagPtr {
-		showResult(ingridNamesWithWorthTable)
+		showResult(ingridNamesWithWorthTable, *limitPtr)
 	}
 	if *saveFlagPtr {
-		saveResultToFile(ingridNamesWithWorthTable, *outputFileNamePtr)
+		saveResultToFile(ingridNamesWithWorthTable, *outputFileNamePtr, *limitPtr)
 	}
 }

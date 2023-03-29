@@ -1,0 +1,61 @@
+# Effect Code,Effect Name,Value
+# Effects W = Weakness, F = Fortify, R = Restore, D = Damage
+# A = rAvage, E = rEgenerate, T = resisT, L = Lingering
+U,Unknown,0
+AHe,Ravage Health,6
+AMa,Ravage Magicka,15
+ASt,Ravage Stamina,24
+CDi,Cure Disease,21
+D,Diarrhea,0
+DHe,Damage Health,5
+DMa,Damage Magicka,52
+DMr,Damage Magicka Regen,265
+DSt,Damage Stamina,43
+DSr,Damage Stamina Regen,159
+EHe,Regenerate Health,177
+EMa,Regenerate Magicka,177
+ESt,Regenerate Stamina,177
+F,Fear,120
+F1h,Fortify One-Handed,118
+F2h,Fortify Two-Handed,118
+FAl,Fortify Alteration,47
+FBa,Fortify Barter,48
+FBl,Fortify Block,118
+FCo,Fortify Conjuration,75
+FCw,Fortify Carry Weight,208
+FDe,Fortify Destruction,151
+FEn,Fortify Enchanting,14
+FHa,Fortify Heavy Armor,55
+FHe,Fortify Health,82
+FIl,Fortify Illusion,94
+FLa,Fortify Light Armor,55
+FLp,Fortify Lockpicking,25
+FMa,Fortify Magicka,71
+FMm,Fortify Marksman,118
+FPp,Fortify Pickpocket,118
+FRe,Fortify Restoration,118
+FSm,Fortify Smithing,82
+FSn,Fortify Sneak,118
+FSt,Fortify Stamina,71
+I,Invisibility,261
+LHe,Lingering Health Damage,86
+LMa,Lingering Magicka Damage,71
+LSt,Lingering Stamina Damage,12
+P,Paralyze,285
+RHe,Restore Health,21
+RMa,Restore Magicka,25
+RPo,Resist Poison,118
+RSt,Restore Stamina,25
+S,Slow,247
+TFi,Resist Fire,86
+TFr,Resist Frost,86
+TMa,Resist Magic,51
+TPo,Resist Poison,118
+TSh,Resist Shock,86
+W,Waterbreathing,100
+WFi,Weakness to Fire,48
+WFr,Weakness to Frost,40
+WMa,Weakness to Magic,51
+WPo,Weakness to Poison,51
+WSh,Weakness to Shock,56
+Z,Frenzy,107

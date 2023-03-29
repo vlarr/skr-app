@@ -58,13 +58,13 @@ func Test_calculateWorth(t *testing.T) {
 			6: {id: 6, name: "effect4", worth: 800},
 		},
 		ingridIdToInfoMap: map[int]*ingridInfo{
-			6:  {id: 6, name: "ingrid1", effectIdArr: [4]int{0, 0, 0, 0}},
-			7:  {id: 7, name: "ingrid2", effectIdArr: [4]int{1, 1, 1, 1}},
-			8:  {id: 8, name: "ingrid3", effectIdArr: [4]int{3, 4, 0, 1}},
-			9:  {id: 9, name: "ingrid4", effectIdArr: [4]int{3, 5, 0, 1}},
-			10: {id: 10, name: "ingrid5", effectIdArr: [4]int{3, 4, 5, 1}},
-			11: {id: 11, name: "ingrid6", effectIdArr: [4]int{0, 3, 4, 5}},
-			12: {id: 12, name: "ingrid7", effectIdArr: [4]int{5, 4, 0, 0}},
+			6:  {id: 6, name: "ingrid1", effectIds: [4]int{0, 0, 0, 0}},
+			7:  {id: 7, name: "ingrid2", effectIds: [4]int{1, 1, 1, 1}},
+			8:  {id: 8, name: "ingrid3", effectIds: [4]int{3, 4, 0, 1}},
+			9:  {id: 9, name: "ingrid4", effectIds: [4]int{3, 5, 0, 1}},
+			10: {id: 10, name: "ingrid5", effectIds: [4]int{3, 4, 5, 1}},
+			11: {id: 11, name: "ingrid6", effectIds: [4]int{0, 3, 4, 5}},
+			12: {id: 12, name: "ingrid7", effectIds: [4]int{5, 4, 0, 0}},
 		},
 	}
 

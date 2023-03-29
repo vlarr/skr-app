@@ -10,22 +10,26 @@ import (
 
 type effectInfo struct {
 	id    int
+	code  string
 	name  string
 	worth float64
 }
 
 type ingridInfo struct {
-	id          int
 	name        string
-	effectIdArr [4]int
+	cost        float64
+	effectCodes [4]string
+	id          int
+	effectIds   [4]int
 }
 
 type context struct {
-	effectIdToInfoMap map[int]*effectInfo
-	ingridIdToInfoMap map[int]*ingridInfo
+	effectCodeToInfoMap map[string]*effectInfo
+	effectIdToInfoMap   map[int]*effectInfo
+	ingridIdToInfoMap   map[int]*ingridInfo
 }
 
-func readEffectCsvFile(filePath string) map[int]*effectInfo {
+func (c *context) readEffectCsvFile(filePath string) {
 	f, err := os.Open(filePath)
 	checkErr(err, "")
 
@@ -36,25 +40,27 @@ func readEffectCsvFile(filePath string) map[int]*effectInfo {
 	checkErr(err, "")
 	log.Printf("Read %d lines from %s.\n", len(records), filePath)
 
-	var result = map[int]*effectInfo{}
-
+	c.effectIdToInfoMap = map[int]*effectInfo{}
+	c.effectCodeToInfoMap = map[string]*effectInfo{}
+	id := 0
 	for _, record := range records {
-		id, err := strconv.Atoi(strings.TrimSpace(record[0]))
-		checkErr(err, "")
+		code := strings.TrimSpace(record[0])
 		name := strings.TrimSpace(record[1])
 		worth, err := strconv.ParseFloat(strings.TrimSpace(record[2]), 64)
 		checkErr(err, "")
-		result[id] = &effectInfo{
+		effectInfoPtr := &effectInfo{
 			id:    id,
+			code:  code,
 			name:  name,
 			worth: worth,
 		}
+		c.effectIdToInfoMap[effectInfoPtr.id] = effectInfoPtr
+		c.effectCodeToInfoMap[effectInfoPtr.code] = effectInfoPtr
+		id++
 	}
-
-	return result
 }
 
-func readIngridCsvFile(filePath string) map[int]*ingridInfo {
+func (c *context) readIngridCsvFile(filePath string) {
 	f, err := os.Open(filePath)
 	checkErr(err, "")
 
@@ -65,37 +71,40 @@ func readIngridCsvFile(filePath string) map[int]*ingridInfo {
 	checkErr(err, "")
 	log.Printf("Read %d lines from %s.\n", len(records), filePath)
 
-	var result = map[int]*ingridInfo{}
-
+	c.ingridIdToInfoMap = map[int]*ingridInfo{}
+	id := 0
 	for _, record := range records {
-		id, err := strconv.Atoi(strings.TrimSpace(record[0]))
-		checkErr(err, "")
-		name := strings.TrimSpace(record[1])
-		eff1, err := strconv.Atoi(strings.TrimSpace(record[2]))
-		checkErr(err, "")
-		eff2, err := strconv.Atoi(strings.TrimSpace(record[3]))
-		checkErr(err, "")
-		eff3, err := strconv.Atoi(strings.TrimSpace(record[4]))
-		checkErr(err, "")
-		eff4, err := strconv.Atoi(strings.TrimSpace(record[5]))
+		name := strings.TrimSpace(record[0])
+
+		cost, err := strconv.ParseFloat(strings.TrimSpace(record[1]), 64)
 		checkErr(err, "")
 
-		result[id] = &ingridInfo{
+		eff1Code := strings.TrimSpace(record[2])
+		eff1Id := c.effectCodeToInfoMap[eff1Code].id
+		eff2Code := strings.TrimSpace(record[3])
+		eff2Id := c.effectCodeToInfoMap[eff2Code].id
+		eff3Code := strings.TrimSpace(record[4])
+		eff3Id := c.effectCodeToInfoMap[eff3Code].id
+		eff4Code := strings.TrimSpace(record[5])
+		eff4Id := c.effectCodeToInfoMap[eff4Code].id
+
+		ingridInfoPtr := &ingridInfo{
 			id:          id,
 			name:        name,
-			effectIdArr: [4]int{eff1, eff2, eff3, eff4},
+			cost:        cost,
+			effectCodes: [4]string{eff1Code, eff2Code, eff3Code, eff4Code},
+			effectIds:   [4]int{eff1Id, eff2Id, eff3Id, eff4Id},
 		}
-	}
 
-	return result
+		c.ingridIdToInfoMap[id] = ingridInfoPtr
+
+		id++
+	}
 }
 
 func readCsvFiles(effectCsvPath string, ingridCsvPath string) *context {
-	effectIdToInfoMap := readEffectCsvFile(effectCsvPath)
-	ingridIdToInfoMap := readIngridCsvFile(ingridCsvPath)
-
-	return &context{
-		effectIdToInfoMap: effectIdToInfoMap,
-		ingridIdToInfoMap: ingridIdToInfoMap,
-	}
+	result := new(context)
+	result.readEffectCsvFile(effectCsvPath)
+	result.readIngridCsvFile(ingridCsvPath)
+	return result
 }
